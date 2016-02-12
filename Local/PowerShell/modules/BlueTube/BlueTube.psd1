@@ -63,7 +63,7 @@ Description = 'PowerShell Module For Development Tasks at BlueTube, LLC.'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = '.\Show-InfoMessage.ps1'
+NestedModules = '.\Show-InfoMessage.ps1', '.\Invoke-SitePreDeploy.ps1'
 
 # Functions to export from this module
 FunctionsToExport = '*'
