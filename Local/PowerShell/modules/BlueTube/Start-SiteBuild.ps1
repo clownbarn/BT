@@ -14,6 +14,7 @@
         
             Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName]"  
             Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
+            Show-InfoMessage "siteName: voices for Chicago Voices"
         }
     }
     Process {
@@ -29,6 +30,13 @@
 
                 $workingDir = $workingDirRoot + "lyric-opera-of-chicago\dotnet"
                 $solutionName = "LyricOpera.Website.sln"                                
+                break                    
+            }
+
+            "voices" {                     
+
+                $workingDir = $workingDirRoot + "lyric-opera-of-chicago\dotnet"
+                $solutionName = "LyricOpera.ChicagoVoices.Website.sln"                                
                 break                    
             }
                         

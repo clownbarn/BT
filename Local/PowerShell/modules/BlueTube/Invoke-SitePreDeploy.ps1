@@ -14,6 +14,7 @@
         
             Show-InfoMessage "Usage: Invove-SitePreDeploy -siteName [siteName]"  
             Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
+            Show-InfoMessage "siteName: voices for Chicago Voices"
         }
     }
     Process {
@@ -27,6 +28,12 @@
             "lyric" {                     
 
                 $workingDir = $workingDirRoot + "lyric-opera-of-chicago\inetpub\LyricOpera.Website"                
+                break                    
+            }
+
+            "voices" {                     
+
+                $workingDir = $workingDirRoot + "lyric-opera-of-chicago\inetpub\LyricOpera.ChicagoVoices.Website"                
                 break                    
             }
                         
