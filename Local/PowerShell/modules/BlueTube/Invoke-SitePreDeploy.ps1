@@ -33,7 +33,7 @@
 
             "voices" {                     
 
-                $workingDir = $workingDirRoot + "lyric-opera-of-chicago\inetpub\LyricOpera.ChicagoVoices.Website"                
+                $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\inetpub\LyricOpera.ChicagoVoices.Website"                
                 break                    
             }
                         

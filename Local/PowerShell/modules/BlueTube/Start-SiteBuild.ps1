@@ -35,7 +35,7 @@
 
             "voices" {                     
 
-                $workingDir = $workingDirRoot + "lyric-opera-of-chicago\dotnet"
+                $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\dotnet"
                 $solutionName = "LyricOpera.ChicagoVoices.Website.sln"                                
                 break                    
             }
