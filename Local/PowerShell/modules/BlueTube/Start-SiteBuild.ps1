@@ -16,6 +16,7 @@
             Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
             Show-InfoMessage "siteName: voices for Chicago Voices"
             Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
+            Show-InfoMessage "siteName: mohawksoa for Mohawk Services (SOA)"
         }
     }
     Process {
@@ -56,6 +57,14 @@
                     $gruntDir = $workingDirRoot + "Mohawk Industries\mohawk\PresentationLayer"                              
                     break                    
                 }
+
+                "mohawksoa" {                     
+
+                    $workingDir = $workingDirRoot + "Mohawk Industries\mohawk-group-soa\dotNet"
+                    $solutionName = "Mohawk.Services.sln" 
+                    $doPreDeployStep = $FALSE
+                    break                    
+                }
                         
                 default {
 
@@ -76,7 +85,7 @@
                 return
             }
                                                 
-            # Second, run the PreDeploy step, if necessary
+            # Second, run the PreDeploy step, if necessary.
             if($doPreDeployStep) {
 
                 Invoke-SitePreDeploy -siteName $siteName
@@ -91,7 +100,7 @@
                 return
             }            
             
-            # Fourth, do the grunt build, if necessary
+            # Fourth, do the grunt build, if necessary.
             if(![string]::IsNullOrEmpty($gruntDir)) {
 
                 cd $gruntDir
