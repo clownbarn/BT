@@ -12,6 +12,6 @@ Function Show-Exception
 
     Process {
         
-        Write-Host (($exception|format-list -force) | Out-String) -ForegroundColor Red
+        Write-Host (($exception | format-list -force) | Out-String) -ForegroundColor Red
     }
 }

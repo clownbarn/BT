@@ -89,8 +89,7 @@
 
             if($LASTEXITCODE -or !$?) {
 
-                Show-ErrorMessage $BUILD_FAILED
-                return
+                throw $BUILD_FAILED
             }
                                                 
             # Second, run the PreDeploy step, if necessary.
@@ -103,9 +102,8 @@
             Invoke-Expression ("devenv " + $solutionName + " /build debug")
 
             if($LASTEXITCODE -or !$?) {
-
-                Show-ErrorMessage $BUILD_FAILED
-                return
+                            
+                throw $BUILD_FAILED
             }            
             
             # Fourth, do the grunt build, if necessary.
@@ -117,22 +115,24 @@
 
                 if($LASTEXITCODE -or !$?) {
 
-                    Show-ErrorMessage $BUILD_FAILED
-                    return
+                    throw $BUILD_FAILED
                 } 
                 
                 Invoke-Expression ("grunt copyassets")
 
                 if($LASTEXITCODE -or !$?) {
 
-                    Show-ErrorMessage $BUILD_FAILED
-                    return
+                    throw $BUILD_FAILED
                 }
             }        
         }
         catch {
-                    
-            Show-Exception $_.Exception            
+            
+            if($_.Exception.Message -ne $BUILD_FAILED) {    
+                Show-Exception $_.Exception
+            }
+
+            throw            
         }
         finally {
 
