@@ -36,6 +36,12 @@
                 $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\inetpub\LyricOpera.ChicagoVoices.Website"                
                 break                    
             }
+
+            "mohawkflooring" {                     
+
+                $workingDir = $workingDirRoot + "Mohawk Industries\mohawk\MohawkFlooring\MohawkFlooring.UI"                
+                break                    
+            }
                         
             default {
 

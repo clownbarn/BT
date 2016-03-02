@@ -1,17 +1,17 @@
 ﻿<#
-    Helper function to show information message.
+    Helper function to show exception details.
 #>
-Function Show-InfoMessage
+Function Show-Exception
 {
     [cmdletbinding()]
         Param(
             [parameter(Mandatory=$true, ValueFromPipeline)]
             [ValidateNotNullOrEmpty()] #No value
-            [string]$msg
+            [Exception]$exception
             )
-    
+
     Process {
         
-        Write-Host $msg -ForegroundColor White
+        Write-Host (($exception|format-list -force) | Out-String) -ForegroundColor Red
     }
 }

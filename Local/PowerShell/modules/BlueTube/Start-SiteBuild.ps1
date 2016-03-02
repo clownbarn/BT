@@ -15,50 +15,111 @@
             Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName]"  
             Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
             Show-InfoMessage "siteName: voices for Chicago Voices"
+            Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
         }
     }
     Process {
 
-        $currentDir = (Get-Item -Path ".\" -Verbose).FullName
-        $workingDirRoot = "C:\BlueTube\Projects\Clients\"
-        $workingDir = ""
-        $solutionName = ""
+        try {
 
-        switch($siteName) {
+            $currentDir = (Get-Item -Path ".\" -Verbose).FullName
+            $workingDirRoot = "C:\BlueTube\Projects\Clients\"
+            $workingDir = ""
+            $solutionName = ""
+            $doPreDeployStep = $FALSE
+            $gruntDir = ""
+            $BUILD_FAILED = "BUILD FAILED"
 
-            "lyric" {                     
+            switch($siteName) {
 
-                $workingDir = $workingDirRoot + "lyric-opera-of-chicago\dotnet"
-                $solutionName = "LyricOpera.Website.sln"                                
-                break                    
-            }
+                "lyric" {                     
 
-            "voices" {                     
+                    $workingDir = $workingDirRoot + "lyric-opera-of-chicago\dotnet"
+                    $solutionName = "LyricOpera.Website.sln"
+                    $doPreDeployStep = $TRUE                                
+                    break                    
+                }
 
-                $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\dotnet"
-                $solutionName = "LyricOpera.ChicagoVoices.Website.sln"                                
-                break                    
-            }
+                "voices" {                     
+
+                    $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\dotnet"
+                    $solutionName = "LyricOpera.ChicagoVoices.Website.sln"
+                    $doPreDeployStep = $TRUE                                
+                    break                    
+                }
+
+                "mohawkflooring" {                     
+
+                    $workingDir = $workingDirRoot + "Mohawk Industries\mohawk\MohawkFlooring"
+                    $solutionName = "MohawkFlooring.sln" 
+                    $doPreDeployStep = $FALSE
+                    $gruntDir = $workingDirRoot + "Mohawk Industries\mohawk\PresentationLayer"                              
+                    break                    
+                }
                         
-            default {
+                default {
 
-                Show-InfoMessage "Invalid Site Name"
-                Show-Usage
+                    Show-InfoMessage "Invalid Site Name"
+                    Show-Usage
+                    return
+                }
+            }
+
+            cd $workingDir
+        
+            # First, perform a clean.
+            Invoke-Expression ("devenv " + $solutionName + " /clean")
+
+            if($LASTEXITCODE -or !$?) {
+
+                Show-ErrorMessage $BUILD_FAILED
                 return
             }
+                                                
+            # Second, run the PreDeploy step, if necessary
+            if($doPreDeployStep) {
+
+                Invoke-SitePreDeploy -siteName $siteName
+            }            
+
+            # Third, build solution (debug for now).
+            Invoke-Expression ("devenv " + $solutionName + " /build debug")
+
+            if($LASTEXITCODE -or !$?) {
+
+                Show-ErrorMessage $BUILD_FAILED
+                return
+            }            
+            
+            # Fourth, do the grunt build, if necessary
+            if(![string]::IsNullOrEmpty($gruntDir)) {
+
+                cd $gruntDir
+
+                Invoke-Expression ("grunt build:prod")
+
+                if($LASTEXITCODE -or !$?) {
+
+                    Show-ErrorMessage $BUILD_FAILED
+                    return
+                } 
+                
+                Invoke-Expression ("grunt copyassets")
+
+                if($LASTEXITCODE -or !$?) {
+
+                    Show-ErrorMessage $BUILD_FAILED
+                    return
+                }
+            }        
         }
+        catch {
+                    
+            Show-Exception $_.Exception            
+        }
+        finally {
 
-        cd $workingDir
-
-        # First, perform a clean.
-        Invoke-Expression ("devenv " + $solutionName + " /clean")
-
-        # Second, build (debug for now).
-        Invoke-Expression ("devenv " + $solutionName + " /build debug")
-
-        # Third, re-deploy the Sitecore files.
-        Invoke-SitePreDeploy -siteName $siteName
-
-        cd $currentDir
+            cd $currentDir
+        }
     }
 }
