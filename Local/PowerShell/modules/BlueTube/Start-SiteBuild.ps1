@@ -65,6 +65,14 @@
                     $doPreDeployStep = $FALSE
                     break                    
                 }
+
+                "mohawkcommercial" {                     
+
+                    $workingDir = $workingDirRoot + "Mohawk Industries\mohawk-group\projects\TMG\trunk"
+                    $solutionName = "TMG.sln" 
+                    $doPreDeployStep = $FALSE
+                    break                    
+                }
                         
                 default {
 
