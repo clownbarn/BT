@@ -142,7 +142,7 @@
 
                 cd $gruntDir
 
-                Invoke-Expression ("grunt build:prod")
+                Invoke-Expression ("grunt build")
 
                 if($LASTEXITCODE -or !$?) {
 
