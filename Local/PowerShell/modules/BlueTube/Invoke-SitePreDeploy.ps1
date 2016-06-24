@@ -15,12 +15,13 @@
             Show-InfoMessage "Usage: Invove-SitePreDeploy -siteName [siteName]"  
             Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
             Show-InfoMessage "siteName: voices for Chicago Voices"
+            Show-InfoMessage "siteName: karastan for Karastan Website"
         }
     }
     Process {
         
         $currentDir = (Get-Item -Path ".\" -Verbose).FullName
-        $workingDirRoot = "C:\BlueTube\Projects\Clients\"
+        $workingDirRoot = "C:\BlueTube\Projects\"
         $workingDir = ""
 
         switch($siteName) {
@@ -36,12 +37,12 @@
                 $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\inetpub\LyricOpera.ChicagoVoices.Website"                
                 break                    
             }
+            
+            "karastan" {                     
 
-            "mohawkflooring" {                     
-
-                $workingDir = $workingDirRoot + "Mohawk Industries\mohawk\MohawkFlooring\MohawkFlooring.UI"                
+                $workingDir = $workingDirRoot + "mohawk-karastan-website\inetpub\Mohawk.Karastan.Website"                
                 break                    
-            }
+            }            
                         
             default {
 
