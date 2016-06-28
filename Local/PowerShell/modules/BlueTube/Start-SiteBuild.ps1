@@ -139,7 +139,7 @@
                 Show-InfoMessage "Copying dependencies..."
                 foreach ($depenencyPath in $dependencySourceDirs) {
 	                Show-InfoMessage "Copying path contents from $depenencyPath to $dependencyDestDir"
-	                robocopy "$depenencyPath" "$dependencyDestDir"
+	                robocopy "$depenencyPath" "$dependencyDestDir" "/XF" "*.config" "*.xml"
                 }
                 Show-InfoMessage "Dependency copy step complete."
             }            
