@@ -26,7 +26,7 @@
         try {
 
             $currentDir = (Get-Item -Path ".\" -Verbose).FullName
-            $workingDirRoot = "C:\BlueTube\Projects\"
+            $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
             $workingDir = ""
             $solutionName = ""
             $doPreDeployStep = $FALSE
@@ -124,6 +124,7 @@
 
                 throw $BUILD_FAILED
             }
+
             Show-InfoMessage "Clean complete."
                                                 
             # Second, run the PreDeploy step, if necessary.
@@ -136,11 +137,14 @@
 
             # Third, copy dependencies, if necessary.
             if($dependencySourceDirs.length -ne 0) {
+
                 Show-InfoMessage "Copying dependencies..."
-                foreach ($depenencyPath in $dependencySourceDirs) {
+
+                foreach ($dependencyPath in $dependencySourceDirs) {
 	                Show-InfoMessage "Copying path contents from $depenencyPath to $dependencyDestDir"
-	                robocopy "$depenencyPath" "$dependencyDestDir" "/XF" "*.config" "*.xml"
+                    Invoke-Expression ("robocopy " + $dependencyPath + " " + $dependencyDestDir + " /XF *.config *.xml")	                
                 }
+
                 Show-InfoMessage "Dependency copy step complete."
             }            
 
@@ -152,6 +156,7 @@
                             
                 throw $BUILD_FAILED
             }
+
             Show-InfoMessage "Solution build complete."
             
             # Fifth, do the grunt build, if necessary.
