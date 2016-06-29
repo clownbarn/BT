@@ -15,6 +15,7 @@
             Show-InfoMessage "Usage: Invove-SitePreDeploy -siteName [siteName]"  
             Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
             Show-InfoMessage "siteName: voices for Chicago Voices"
+            Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: karastan for Karastan Website"
         }
     }
@@ -36,6 +37,12 @@
 
                 $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\inetpub\LyricOpera.ChicagoVoices.Website"                
                 break                    
+            }
+
+            "mohawkgroup" {
+                
+                $workingDir = $workingDirRoot + "mohawk-group-website\inetpub\Mohawk.Commercial.Website"                
+                break
             }
             
             "karastan" {                     

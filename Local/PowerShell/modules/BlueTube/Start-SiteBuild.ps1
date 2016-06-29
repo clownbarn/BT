@@ -18,6 +18,7 @@
             Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
             Show-InfoMessage "siteName: mohawksoa for Mohawk Services (SOA)"
             Show-InfoMessage "siteName: mohawkcommercial for Mohawk Commercial (TMG/Commercial)"
+            Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: karastan for Karastan Website"
         }
     }
@@ -93,6 +94,19 @@
                     break                    
                 }
 
+                "mohawkgroup" {                     
+                    
+                    Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
+
+                    $workingDir = $workingDirRoot + "mohawk-group-website\dotnet"
+                    $solutionName = "Mohawk.Commercial.Website.sln" 
+                    $doPreDeployStep = $TRUE
+                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
+                    $dependencyDestDir = $workingDirRoot + "mohawk-group-website\dotnet\dependencies\Mohawk SOA"
+                    $gulpDir = $workingDirRoot + "mohawk-group-website\inetpub\PresentationLayer"                              
+                    break                    
+                }
+
                 "karastan" {                     
                     
                     Show-InfoMessage "Starting Karastan solution build..."
@@ -141,7 +155,7 @@
                 Show-InfoMessage "Copying dependencies..."
 
                 foreach ($dependencyPath in $dependencySourceDirs) {
-	                Show-InfoMessage "Copying path contents from $depenencyPath to $dependencyDestDir"
+	                Show-InfoMessage "Copying path contents from $dependencyPath to $dependencyDestDir"
                     Invoke-Expression ("robocopy " + $dependencyPath + " " + $dependencyDestDir + " /XF *.config *.xml")	                
                 }
 

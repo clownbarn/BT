@@ -2,12 +2,12 @@
 {    
     Process
     {
-        Show-InfoMessage "Starting Karastan Build..."
+        Show-InfoMessage "Starting Karastan Website Build..."
 
         Start-SiteBuild -siteName mohawksoa
 
         Start-SiteBuild -siteName karastan
         
-        Show-InfoMessage "Karastan Build Complete."        
+        Show-InfoMessage "Karastan Website Build Complete."        
     }
 }
