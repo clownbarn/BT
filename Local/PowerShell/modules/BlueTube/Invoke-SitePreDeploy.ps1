@@ -22,7 +22,7 @@
     Process {
         
         $currentDir = (Get-Item -Path ".\" -Verbose).FullName
-        $workingDirRoot = "C:\BlueTube\Projects\"
+        $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
         $workingDir = ""
 
         switch($siteName) {
