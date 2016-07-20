@@ -70,7 +70,6 @@
             Show-InfoMessage ("Restoring " + $databaseToRestore + " Database from file: " + $backupFileName + "...")
 
             # Second, restart SQL Server to drop any open connections.
-
             $sqlServiceCommand = "net stop MSSQLSERVER"
             Invoke-Expression -Command:$sqlServiceCommand
         
