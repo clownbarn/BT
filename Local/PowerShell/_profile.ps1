@@ -1,5 +1,8 @@
-﻿$env:PSModulePath = $env:PSModulePath + ";c:\Tools\Bin\BT\PowerShell\modules"
+﻿$workingDirRoot = if(![string]::IsNullOrEmpty($env:TOOLSPATH)) { $env:TOOLSPATH } else { "C:\Tools\Bin\" }
+$modulePath = $workingDirRoot + "BT\PowerShell\modules"
+
+$env:PSModulePath = $env:PSModulePath + ";$($modulePath)"
 
 Import-Module BlueTube -verbose
 
-Set-Location C:\Tools\Bin
+Set-Location $workingDirRoot
