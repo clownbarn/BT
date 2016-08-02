@@ -13,8 +13,6 @@
         Function Show-Usage {
         
             Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName]"  
-            Show-InfoMessage "siteName: lyric for Lyric Opera of Chicago"
-            Show-InfoMessage "siteName: voices for Chicago Voices"
             Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
             Show-InfoMessage "siteName: mohawksoa for Mohawk Services (SOA)"
             Show-InfoMessage "siteName: mohawkcommercial for Mohawk Commercial (TMG/Commercial)"
@@ -28,47 +26,34 @@
 
             $currentDir = (Get-Item -Path ".\" -Verbose).FullName
             $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
-            $workingDir = ""
+            $projectDirRoot = ""
+            $solutionDir = ""
             $solutionName = ""
+            $packageDir = ""
             $doPreDeployStep = $FALSE
             $gruntDir = ""
             $gulpDir = ""
             $dependencySourceDirs = @()
             $dependencyDestDir = ""
+            $nugetPackageConfigs = @()
             $BUILD_FAILED = "BUILD FAILED"
 
             switch($siteName) {
-
-                "lyric" {                     
-                    
-                    Show-InfoMessage "Starting Lyric Opera of Chicago solution build..."
-
-                    $workingDir = $workingDirRoot + "lyric-opera-of-chicago\dotnet"
-                    $solutionName = "LyricOpera.Website.sln"
-                    $doPreDeployStep = $TRUE                                
-                    break                    
-                }
-
-                "voices" {                     
-                    
-                    Show-InfoMessage "Starting Chicago Voices solution build..."
-
-                    $workingDir = $workingDirRoot + "lyric-opera-of-chicago-voices\dotnet"
-                    $solutionName = "LyricOpera.ChicagoVoices.Website.sln"
-                    $doPreDeployStep = $TRUE                                
-                    break                    
-                }
-
+                
                 "mohawkflooring" {                     
                     
                     Show-InfoMessage "Starting Mohawk Flooring (Residential) solution build..."
 
-                    $workingDir = $workingDirRoot + "mohawk\MohawkFlooring"
-                    $solutionName = "MohawkFlooring.sln" 
-                    $doPreDeployStep = $FALSE
+                    $projectDirRoot = $workingDirRoot + "mohawk"
+                    $solutionDir = $projectDirRoot + "\MohawkFlooring"
+                    $solutionName = "MohawkFlooring.sln"
                     $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $workingDirRoot + "mohawk\MohawkFlooring\Dependencies"
-                    $gruntDir = $workingDirRoot + "mohawk\PresentationLayer"                              
+                    $dependencyDestDir = $solutionDir + "\Dependencies"
+                    $gruntDir = $projectDirRoot + "\PresentationLayer"                              
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
                     break                    
                 }
 
@@ -76,9 +61,13 @@
                     
                     Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
 
-                    $workingDir = $workingDirRoot + "mohawk-group-soa\dotNet"
-                    $solutionName = "Mohawk.Services.sln" 
+                    $projectDirRoot = $workingDirRoot + "mohawk-group-soa"
+                    $solutionDir = $projectDirRoot + "\dotnet"
+                    $solutionName = "Mohawk.Services.sln"
+                    $packageDir = $solutionDir + "\packages"
+
                     $doPreDeployStep = $FALSE
+
                     break                    
                 }
 
@@ -86,11 +75,15 @@
                     
                     Show-InfoMessage "Starting Mohawk Commercial (TMG/Commercial) solution build..."
 
-                    $workingDir = $workingDirRoot + "mohawk-group\projects\TMG\trunk"
+                    $projectDirRoot = $workingDirRoot + "mohawk-group"
+                    $solutionDir = $projectDirRoot + "\projects\TMG\trunk"
                     $solutionName = "TMG.sln"
                     $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net35\bin\Debug")
-                    $dependencyDestDir = $workingDirRoot + "mohawk-group\projects\TMG\trunk\Dependencies" 
+                    $dependencyDestDir = $solutionDir + "\Dependencies"
+                    $packageDir = $solutionDir + "\packages"
+
                     $doPreDeployStep = $FALSE
+
                     break                    
                 }
 
@@ -98,12 +91,16 @@
                     
                     Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
 
-                    $workingDir = $workingDirRoot + "mohawk-group-website\dotnet"
-                    $solutionName = "Mohawk.Commercial.Website.sln" 
-                    $doPreDeployStep = $TRUE
+                    $projectDirRoot = $workingDirRoot + "mohawk-group-website"
+                    $solutionDir = $projectDirRoot + "\dotnet"
+                    $solutionName = "Mohawk.Commercial.Website.sln"
                     $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $workingDirRoot + "mohawk-group-website\dotnet\dependencies\Mohawk SOA"
-                    $gulpDir = $workingDirRoot + "mohawk-group-website\inetpub\PresentationLayer"                              
+                    $dependencyDestDir = $solutionDir + "\dependencies\Mohawk SOA"
+                    $gulpDir = $projectDirRoot + "\inetpub\PresentationLayer"                              
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $TRUE
+
                     break                    
                 }
 
@@ -111,12 +108,16 @@
                     
                     Show-InfoMessage "Starting Karastan solution build..."
 
-                    $workingDir = $workingDirRoot + "mohawk-karastan-website\dotnet"
-                    $solutionName = "Mohawk.Karastan.Website.sln" 
-                    $doPreDeployStep = $TRUE
+                    $projectDirRoot = $workingDirRoot + "mohawk-karastan-website"
+                    $solutionDir = $projectDirRoot + "\dotnet"
+                    $solutionName = "Mohawk.Karastan.Website.sln"
                     $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $workingDirRoot + "mohawk-karastan-website\dotnet\dependencies\Mohawk SOA"
-                    $gulpDir = $workingDirRoot + "mohawk-karastan-website\inetpub\PresentationLayer"                              
+                    $dependencyDestDir = $solutionDir + "\dependencies\Mohawk SOA"
+                    $gulpDir = $projectDirRoot + "\inetpub\PresentationLayer"                              
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $TRUE
+
                     break                    
                 }
                         
@@ -128,7 +129,7 @@
                 }
             }
 
-            cd $workingDir
+            cd $solutionDir
         
             # First, perform a clean.
             Show-InfoMessage "Performing clean..."
@@ -155,14 +156,36 @@
                 Show-InfoMessage "Copying dependencies..."
 
                 foreach ($dependencyPath in $dependencySourceDirs) {
-	                Show-InfoMessage "Copying path contents from $dependencyPath to $dependencyDestDir"
-                    Invoke-Expression ("robocopy " + $dependencyPath + " " + $dependencyDestDir + " /XF *.config *.xml")	                
+                    Show-InfoMessage "Copying path contents from $dependencyPath to $dependencyDestDir"
+                    Invoke-Expression ("robocopy " + $dependencyPath + " " + $dependencyDestDir + " /XF *.config *.xml")
                 }
 
                 Show-InfoMessage "Dependency copy step complete."
             }            
 
-            # Fourth, build solution (debug for now).
+            # Fourth, restore Nuget packages, if necessary.
+            $nugetPackageConfigs = Get-ChildItem $projectDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
+
+            if($nugetPackageConfigs.length -ne 0) {
+                
+                Show-InfoMessage "Restoring Nuget packages for solution..."
+
+                foreach ($config in $nugetPackageConfigs) {
+
+                    Show-InfoMessage "Restoring Nuget packages defined in: $($config)"
+                    
+                    Invoke-Expression ("nuget restore -NonInteractive " + $config + " -PackagesDirectory " + $packageDir + " -MSBuildVersion 14 -Verbosity detailed")
+
+                    if($LASTEXITCODE -or !$?) {
+                            
+                        throw $BUILD_FAILED
+                    }
+                }
+
+                Show-InfoMessage "Nuget package restore step complete."
+            }            
+
+            # Fifth, build solution (debug for now).
             Show-InfoMessage "Building solution..."
             Invoke-Expression ("devenv " + $solutionName + " /build debug")
 
@@ -173,7 +196,7 @@
 
             Show-InfoMessage "Solution build complete."
             
-            # Fifth, do the grunt build, if necessary.
+            # Sixth, do the grunt build, if necessary.
             if(![string]::IsNullOrEmpty($gruntDir)) {
                 
                 Show-InfoMessage "Performing Grunt build step..."
@@ -196,7 +219,7 @@
                 Show-InfoMessage "Grunt build step complete."
             }
             
-            # Sixth, do the gulp build, if necessary.
+            # Seventh, do the gulp build, if necessary.
             if(![string]::IsNullOrEmpty($gulpDir)) {
                 
                 Show-InfoMessage "Performing Gulp build step..."
