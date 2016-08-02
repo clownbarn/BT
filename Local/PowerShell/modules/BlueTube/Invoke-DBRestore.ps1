@@ -76,19 +76,32 @@
             $sqlServiceCommand = "net start MSSQLSERVER"
             Invoke-Expression -Command:$sqlServiceCommand
         
-            Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\10.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+            Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
 
             $sqlServer = New-Object "Microsoft.SqlServer.Management.SMO.Server"
-        
+                    
             if($sqlServer.databases[$databaseToRestore])
             {
                 $sqlServer.databases[$databaseToRestore].Drop()
             }
 
             # Third, Restore the database.
-            $sqlServerName = $sqlServer.Name      
+            $sqlServerName = $sqlServer.Name
 
-            Restore-SqlDatabase -ServerInstance $sqlServerName -Database $databaseToRestore -BackupFile $backupFilePath
+            $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+
+            $restore = New-Object "Microsoft.SqlServer.Management.Smo.Restore, $($smoExtendedAssemblyInfo)"
+            $backupDevice = New-Object "Microsoft.SqlServer.Management.Smo.BackupDeviceItem, $($smoExtendedAssemblyInfo)" ($backupFilePath, "File")
+            $restore.Devices.Add($backupDevice)
+            $fileList = $restore.ReadFileList($sqlServer)
+            $logicalDataFileName = $fileList.Select("Type = 'D'")[0].LogicalName
+            $logicalLogFileName = $fileList.Select("Type = 'L'")[0].LogicalName
+
+            $relocateData = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalDataFileName, "$($sqlServer.MasterDBPath)\$($databaseToRestore).mdf")
+            $relocateLog = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalLogFileName, "$($sqlServer.MasterDBLogPath)\$($databaseToRestore).ldf")
+            
+
+            Restore-SqlDatabase -ServerInstance $sqlServerName -Database $databaseToRestore -BackupFile $backupFilePath -RelocateFile @($relocateData,$relocateLog)
 
             Show-InfoMessage ($databaseToRestore + " Database Restore Complete.")            
         }
