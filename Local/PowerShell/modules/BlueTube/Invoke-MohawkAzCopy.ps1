@@ -15,7 +15,7 @@
         #>
         function Show-Usage() {
         
-            Show-InfoMessage "Usage: Mohawk-AzCopy -source [source] -dest [dest]"
+            Show-InfoMessage "Usage: Invoke-MohawkAzCopy -source [source] -dest [dest]"
             Show-InfoMessage "Valid values for -source and -dest: HQ, DEV, QA, UAT, and PROD"
         }
     }
@@ -107,7 +107,6 @@
                 $sourceTemplateBlob = $hqTemplateBlob
             
                 break
-
             }        
             $_DEV {
             
@@ -116,7 +115,6 @@
                 $sourceTemplateBlob = $devTemplateBlob
 
                 break
-
             }
             $_QA {
             
@@ -125,7 +123,6 @@
                 $sourceTemplateBlob = $qaTemplateBlob
 
                 break
-
             }
             $_UAT {
             
@@ -134,7 +131,6 @@
                 $sourceTemplateBlob = $uatTemplateBlob
 
                 break
-
             }
             $_PROD {
             
@@ -143,7 +139,6 @@
                 $sourceTemplateBlob = $prodTemplateBlob
 
                 break
-
             }
             default {
             
@@ -162,7 +157,6 @@
                 $destTemplateBlob = $hqTemplateBlob
             
                 break
-
             }        
             $_DEV {
             
@@ -171,7 +165,6 @@
                 $destTemplateBlob = $devTemplateBlob
 
                 break
-
             }
             $_QA {
             
@@ -180,7 +173,6 @@
                 $destTemplateBlob = $qaTemplateBlob
 
                 break
-
             }
             $_UAT {
             
@@ -189,7 +181,6 @@
                 $destTemplateBlob = $uatTemplateBlob
 
                 break
-
             }
             $_PROD {
             
@@ -198,7 +189,6 @@
                 $destTemplateBlob = $prodTemplateBlob
 
                 break
-
             }
             default {
 
