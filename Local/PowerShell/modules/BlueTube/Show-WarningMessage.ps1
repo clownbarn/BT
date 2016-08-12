@@ -1,7 +1,7 @@
 ﻿<#
-    Helper function to show error message.
+    Helper function to show warning message.
 #>
-Function Show-ErrorMessage
+Function Show-WarningMessage
 {
     [cmdletbinding()]
         Param(
@@ -12,6 +12,6 @@ Function Show-ErrorMessage
     
     Process {
         
-        Write-Host "ERROR: $($msg)" -ForegroundColor Red
+        Write-Host "WARNING: $($msg)" -ForegroundColor Yellow
     }
 }
