@@ -1,4 +1,18 @@
-﻿Function Invoke-MohawkAzCopy {
+﻿# Invoke-MohawkAzCopy is a Powershell Cmdlet that copies Azure blobs for Product Spec PDFs,
+# Sustainability PDFs, and all PDF Template Assets from one environment to another.
+# This script has a dependency on the AzCopy Executable, which must be in the PATH
+# Environment Variable where this script is used.
+#
+# AzCopy can be obtained here: http://aka.ms/downloadazcopy
+# 
+# Once installed, ensure the executable is in the PATH Environment Variable. The default installation
+# path for AzCopy is typically : %PROGRAMFILES(X86)%\Microsoft SDKs\Azure\AzCopy
+#
+# Example Usage: Mohawk-AzCopy -source DEV -dest QA
+#
+# Valid values for -source and -dest: HQ, DEV, QA, UAT, and PROD
+
+Function Invoke-MohawkAzCopy {
     [cmdletbinding()]
     Param(        
         [parameter(Mandatory=$true, ValueFromPipeline)]
