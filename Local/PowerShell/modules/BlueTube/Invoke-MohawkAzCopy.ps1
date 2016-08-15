@@ -60,10 +60,10 @@ Function Invoke-MohawkAzCopy {
 
             Show-WarningMessage "The specified Destination Environment is PROD. To continue, press Y, to quit, press any other key."
 
-            $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $keyInfo = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         
             # 89 is the Y key
-            if($x.VirtualKeyCode -ne 89) { 
+            if($keyInfo.VirtualKeyCode -ne 89) { 
             
                 Show-InfoMessage "No files will be copied."
                 return
