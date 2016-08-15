@@ -66,8 +66,18 @@
 
             $backupFilePath = "$($dbBackupStorageDir)\$($backupFileName)"
 
+            Show-WarningMessage "Preparing to restore from file: $($backupFilePath). The $($databaseToRestore) database will be overwritten. To continue press Y. To quit, press any other key."
+
+            $keyInfo = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         
-            Show-InfoMessage ("Restoring " + $databaseToRestore + " Database from file: " + $backupFileName + "...")
+            # 89 is the Y key
+            if($keyInfo.VirtualKeyCode -ne 89) { 
+            
+                Show-InfoMessage "The restore operation was cancelled."
+                return
+            }
+        
+            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."
 
             # Second, restart SQL Server to drop any open connections.
             $sqlServiceCommand = "net stop MSSQLSERVER"
