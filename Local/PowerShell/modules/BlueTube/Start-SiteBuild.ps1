@@ -18,6 +18,7 @@
             Show-InfoMessage "siteName: mohawkcommercial for Mohawk Commercial (TMG/Commercial)"
             Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: karastan for Karastan Website"
+            Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
         }
     }
     Process {
@@ -117,6 +118,22 @@
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $TRUE
+
+                    break                    
+                }
+
+                "rrts" {                     
+                    
+                    Show-InfoMessage "Starting Mohawk Residential Ready To Ship solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-residential-ready-to-ship"
+                    $solutionDir = $projectDirRoot + "\dotnet"
+                    $solutionName = "Mohawk.Residential.ReadyToShip.sln"
+                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
+                    $dependencyDestDir = $solutionDir + "\Dependencies"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
 
                     break                    
                 }
