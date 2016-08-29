@@ -17,6 +17,8 @@
 			Show-InfoMessage "Usage: Invoke-DBBackup -database [db]"        
 			Show-InfoMessage "db: services for Mohawk_Services_Dev Database"
             Show-InfoMessage "db: commercial for Mohawk_TMGCommercial Database"
+			Show-InfoMessage "db: flooring for MFProduct Database"
+			Show-InfoMessage "db: inventory for Mohawk_InventoryData Database"
 			Show-InfoMessage "db: mongo for Mohawk_Mongo_Data Database"
 		}
 	}
@@ -39,6 +41,18 @@
 				{                     
 					$databaseToBackup = "Mohawk_TMGCommercial"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
+					break                    
+				}
+			"flooring"
+				{                     
+					$databaseToBackup = "Mohawk_MFProduct"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
+					break                    
+				}
+			"inventory"
+				{                     
+					$databaseToBackup = "Mohawk_InventoryData"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_InventoryData"
 					break                    
 				}
             "mongo"
