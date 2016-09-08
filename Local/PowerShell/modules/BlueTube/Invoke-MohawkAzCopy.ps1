@@ -86,23 +86,23 @@ Function Invoke-MohawkAzCopy {
 
         $hqProductBlob = "$($blobRoot)pdf-product-dev/"
         $hqSustainabilityBlob = "$($blobRoot)pdf-sustainability-dev/"
-        $hqTemplateBlob = "$($blobRoot)pdf-template-dev/"
+        $hqTemplateBlob = "$($blobRoot)template-dev/"
 
         $devProductBlob = "$($blobRoot)pdf-product-dev/"
         $devSustainabilityBlob = "$($blobRoot)pdf-sustainability-dev/"
-        $devTemplateBlob = "$($blobRoot)pdf-template-dev/"
+        $devTemplateBlob = "$($blobRoot)template-dev/"
 
         $qaProductBlob = "$($blobRoot)pdf-product-qa/"
         $qaSustainabilityBlob = "$($blobRoot)pdf-sustainability-qa/"
-        $qaTemplateBlob = "$($blobRoot)pdf-template-qa/"    
+        $qaTemplateBlob = "$($blobRoot)template-qa/"    
 
         $uatProductBlob = "$($blobRoot)pdf-product-uat/"
         $uatSustainabilityBlob = "$($blobRoot)pdf-sustainability-uat/"
-        $uatTemplateBlob = "$($blobRoot)pdf-template-uat/"    
+        $uatTemplateBlob = "$($blobRoot)template-uat/"    
 
         $prodProductBlob = "$($blobRoot)pdf-product-prod/"
         $prodSustainabilityBlob = "$($blobRoot)pdf-sustainability-prod/"
-        $prodTemplateBlob = "$($blobRoot)pdf-template-prod/"
+        $prodTemplateBlob = "$($blobRoot)template-prod/"
 
         $sourceProductBlob = ""
         $sourceSustainabilityBlob = ""
