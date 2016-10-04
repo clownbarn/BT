@@ -20,6 +20,8 @@
             Show-InfoMessage "db: flooring for MFProduct Database"
             Show-InfoMessage "db: inventory for Mohawk_InventoryData Database"
             Show-InfoMessage "db: mongo for Mohawk_Mongo_Data Database"
+            Show-InfoMessage "db: karastan for Mohawk_Karastan Database"
+            Show-InfoMessage "db: dealer for Mohawk_MFDealer Database"
         }
     }
     Process {
@@ -60,6 +62,18 @@
                 {                     
                     $databaseToRestore = "Mohawk_Mongo_Data"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Mongo_Data"
+                    break                    
+                }
+            "karastan"
+                {                     
+                    $databaseToRestore = "Mohawk_Karastan"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
+                    break                    
+                }
+            "dealer"
+                {                     
+                    $databaseToRestore = "Mohawk_MFDealer"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
                     break                    
                 }
             
