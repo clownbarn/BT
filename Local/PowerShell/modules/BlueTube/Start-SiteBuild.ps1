@@ -35,8 +35,6 @@
             $doPreDeployStep = $FALSE
             $gruntDir = ""
             $gulpDir = ""
-            $dependencySourceDirs = @()
-            $dependencyDestDir = ""
             $nugetPackageConfigs = @()
             $BUILD_FAILED = "BUILD FAILED"
 
@@ -49,8 +47,6 @@
                     $projectDirRoot = $workingDirRoot + "mohawk"
                     $solutionDir = $projectDirRoot + "\MohawkFlooring"
                     $solutionName = "MohawkFlooring.sln"
-                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $solutionDir + "\Dependencies"
                     $gruntDir = $projectDirRoot + "\PresentationLayer"                              
                     $packageDir = $solutionDir + "\packages"
 
@@ -80,8 +76,6 @@
                     $projectDirRoot = $workingDirRoot + "mohawk-group"
                     $solutionDir = $projectDirRoot + "\projects\TMG\trunk"
                     $solutionName = "TMG.sln"
-                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net35\bin\Debug")
-                    $dependencyDestDir = $solutionDir + "\Dependencies"
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
@@ -96,8 +90,6 @@
                     $projectDirRoot = $workingDirRoot + "mohawk-group-website"
                     $solutionDir = $projectDirRoot + "\dotnet"
                     $solutionName = "Mohawk.Commercial.Website.sln"
-                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $solutionDir + "\dependencies\Mohawk SOA"
                     $gulpDir = $projectDirRoot + "\inetpub\PresentationLayer"                              
                     $packageDir = $solutionDir + "\packages"
 
@@ -113,8 +105,6 @@
                     $projectDirRoot = $workingDirRoot + "mohawk-karastan-website"
                     $solutionDir = $projectDirRoot + "\dotnet"
                     $solutionName = "Mohawk.Karastan.Website.sln"
-                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $solutionDir + "\dependencies\Mohawk SOA"
                     $gulpDir = $projectDirRoot + "\inetpub\PresentationLayer"                              
                     $packageDir = $solutionDir + "\packages"
 
@@ -130,8 +120,6 @@
                     $projectDirRoot = $workingDirRoot + "mohawk-residential-ready-to-ship"
                     $solutionDir = $projectDirRoot + "\dotnet"
                     $solutionName = "Mohawk.Residential.ReadyToShip.sln"
-                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $solutionDir + "\Dependencies"
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
@@ -146,8 +134,6 @@
                     $projectDirRoot = $workingDirRoot + "mohawk-ready-to-ship"
                     $solutionDir = $projectDirRoot + "\dotnet"
                     $solutionName = "MohawkReadyToShip.Framework.sln"
-                    $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\Debug")
-                    $dependencyDestDir = $solutionDir + "\Dependencies"
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
@@ -184,18 +170,11 @@
                 Show-InfoMessage "PreDeploy step complete."
             }            
 
-            # Third, copy dependencies, if necessary.
-            if($dependencySourceDirs.length -ne 0) {
-
-                Show-InfoMessage "Copying dependencies..."
-
-                foreach ($dependencyPath in $dependencySourceDirs) {
-                    Show-InfoMessage "Copying path contents from $dependencyPath to $dependencyDestDir"
-                    Invoke-Expression ("robocopy " + $dependencyPath + " " + $dependencyDestDir + " /XF *.config *.xml")
-                }
-
-                Show-InfoMessage "Dependency copy step complete."
-            }            
+            # Third, copy dependencies, if necessary (Not necessary for SOA itself).
+            if($siteName -ne "mohawksoa")
+            {
+                Invoke-MohawkDependencyCopy -siteName $siteName            
+            }
 
             # Fourth, restore Nuget packages, if necessary.
             $nugetPackageConfigs = Get-ChildItem $projectDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
