@@ -22,6 +22,7 @@
 			Show-InfoMessage "db: mongo for Mohawk_Mongo_Data Database"
             Show-InfoMessage "db: karastan for Mohawk_Karastan Database"
             Show-InfoMessage "db: dealer for Mohawk_MFDealer Database"
+            Show-InfoMessage "db: durkan for Mohawk_Durkan Database"
 		}
 	}
 	Process {
@@ -73,6 +74,12 @@
 				{                     
 					$databaseToBackup = "Mohawk_MFDealer"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
+					break                    
+				}
+            "durkan"
+				{                     
+					$databaseToBackup = "Mohawk_Durkan"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
 					break                    
 				}
             
