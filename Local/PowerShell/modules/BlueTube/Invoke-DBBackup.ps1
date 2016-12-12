@@ -1,10 +1,23 @@
-﻿Function Invoke-DBBackup {
+﻿# Invoke-DBBackup is a Powershell Cmdlet that backs up a specified
+# Mohawk database for a specified environment.
+#
+# Example Usage: Invoke-DBBackup -database services -env LOCAL
+#
+# Valid Values for -database: services, commercial, residential, inventory, mongo, karastan, dealer, durkan
+# Valid values for -env: LOCAL, DEV, QA, UAT, and PROD
+#
+# Environment variable required: DBBACKUPSTORAGEROOT must be set to the path where backups are to be stored.
+
+Function Invoke-DBBackup {
     
 	[cmdletbinding()]
 		Param(
 			[parameter(Mandatory=$true, ValueFromPipeline)]
 			[ValidateNotNullOrEmpty()] #No value
-			[string]$database
+			[string]$database,  
+            [parameter(Mandatory=$true, ValueFromPipeline)]
+            [ValidateNotNullOrEmpty()] #No value
+            [string]$env   
 			)
             
 	Begin {
@@ -14,78 +27,222 @@
 		#>
 		Function Show-Usage {
         
-			Show-InfoMessage "Usage: Invoke-DBBackup -database [db]"        
-			Show-InfoMessage "db: services for Mohawk_Services_Dev Database"
-            Show-InfoMessage "db: commercial for Mohawk_TMGCommercial Database"
-			Show-InfoMessage "db: flooring for MFProduct Database"
-			Show-InfoMessage "db: inventory for Mohawk_InventoryData Database"
-			Show-InfoMessage "db: mongo for Mohawk_Mongo_Data Database"
-            Show-InfoMessage "db: karastan for Mohawk_Karastan Database"
-            Show-InfoMessage "db: dealer for Mohawk_MFDealer Database"
-            Show-InfoMessage "db: durkan for Mohawk_Durkan Database"
+			Show-InfoMessage "Usage: Invoke-DBBackup -database [database] -env [env]"        
+			Show-InfoMessage "[database]: services for Mohawk_Services Database"
+            Show-InfoMessage "[database]: commercial for Mohawk_TMGCommercial Database"
+			Show-InfoMessage "[database]: residential for MFProduct Database"
+			Show-InfoMessage "[database]: inventory for Mohawk_InventoryData Database"
+			Show-InfoMessage "[database]: mongo for Mohawk_Mongo_Data Database"
+            Show-InfoMessage "[database]: karastan for Mohawk_Karastan Database"
+            Show-InfoMessage "[database]: dealer for Mohawk_MFDealer Database"
+            Show-InfoMessage "[database]: durkan for Mohawk_Durkan Database"
+            Show-InfoMessage "Valid values for [env]: LOCAL, DEV, QA, UAT, and PROD"
 		}
 	}
 	Process {
         
+        $_LOCAL = "LOCAL"
+        $_DEV = "DEV"
+        $_QA = "QA"
+        $_UAT = "UAT"
+        $_PROD = "PROD"
+
+        # Validate $env parameter
+        if(!(($env -eq $_LOCAL) -or ($env -eq $_DEV) -or ($env -eq $_QA) -or ($env -eq $_UAT) -or ($env -eq $_PROD))) {
+
+            Show-InfoMessage "Invalid environment specified."
+			Show-Usage
+			return
+        }
+
 		$workingDir = (Get-Item -Path ".\" -Verbose).FullName
 		$databaseToBackup = "";
         $dbBackupStorageRoot = if(![string]::IsNullOrEmpty($env:DBBACKUPSTORAGEROOT)) { $env:DBBACKUPSTORAGEROOT } else { "C:\stuff\DBBackups\" }
         $dbBackupStorageDir = "";
 
+        $_SERVICES_DB = "services"
+        $_COMMERCIAL_DB = "commercial"
+        $_RESIDENTIAL_DB = "residential"
+        $_INVENTORY_DB = "inventory"
+        $_MONGO_DB = "mongo"
+        $_KARASTAN_DB = "karastan"
+        $_DEALER_DB = "dealer"
+        $_DURKAN_DB = "durkan"
+
 		switch($database)
 		{
-			"services"
-				{                     
-					$databaseToBackup = "Mohawk_Services_Dev"
+			$_SERVICES_DB
+				{ 
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_Services_Dev"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "Mohawk_Services_Dev"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "Mohawk_Services_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "Mohawk_Services_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "Mohawk_Services"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Services"
 					break                    
 				}
-            "commercial"
-				{                     
-					$databaseToBackup = "Mohawk_TMGCommercial"
+            $_COMMERCIAL_DB
+				{					
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_TMGCommercial"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "TMGCommercial_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "TMGCommercial_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "TMGCommercial_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "TMGCommercial"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
 					break                    
 				}
-			"flooring"
-				{                     
-					$databaseToBackup = "Mohawk_MFProduct"
+			$_RESIDENTIAL_DB
+				{					
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_MFProduct"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "MFProduct_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "MFProduct_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "MFProductStaging"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "MFProduct"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
 					break                    
 				}
-			"inventory"
-				{                     
-					$databaseToBackup = "Mohawk_InventoryData"
+			$_INVENTORY_DB
+				{					
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_InventoryData"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "Mohawk_InventoryData_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "Mohawk_InventoryData_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "Mohawk_InventoryData_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "Mohawk_InventoryData"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_InventoryData"
 					break                    
 				}
-            "mongo"
-				{                     
-					$databaseToBackup = "Mohawk_Mongo_Data"
+            $_MONGO_DB
+				{
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_Mongo_Data"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "Mohawk_Mongo_Data_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "Mohawk_Mongo_Data_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "Mohawk_Mongo_Data_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "Mohawk_Mongo_Data"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Mongo_Data"
 					break                    
 				}
-            "karastan"
-				{                     
-					$databaseToBackup = "Mohawk_Karastan"
+            $_KARASTAN_DB
+				{					
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_Karastan"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "Mohawk_Karastan_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "Mohawk_Karastan_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "MFKarastanStaging"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "MFKarastan"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
 					break                    
 				}
-            "dealer"
-				{                     
-					$databaseToBackup = "Mohawk_MFDealer"
+            $_DEALER_DB
+				{
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_MFDealer"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "Mohawk_MFDealer_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "Mohawk_MFDealer_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "MFDearlerStaging"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "MFDealer"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
 					break                    
 				}
-            "durkan"
-				{                     
-					$databaseToBackup = "Mohawk_Durkan"
+            $_DURKAN_DB
+				{
+                    if($env -eq $_LOCAL) {
+					    $databaseToBackup = "Mohawk_Durkan"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToBackup = "Mohawk_Durkan_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToBackup = "Mohawk_Durkan_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToBackup = "Mohawk_Durkan_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToBackup = "Mohawk_Durkan"
+                    }
+
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
 					break                    
 				}
             
 
 			default {
-				Show-InfoMessage "Invalid Database"
+				Show-InfoMessage "Invalid Database specified."
 				Show-Usage
 				return
 			}
