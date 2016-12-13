@@ -17,7 +17,7 @@
             Show-InfoMessage "Usage: Invoke-DBRestore -database [db]"        
             Show-InfoMessage "db: services for Mohawk_Services_Dev Database"
             Show-InfoMessage "db: commercial for Mohawk_TMGCommercial Database"
-            Show-InfoMessage "db: flooring for MFProduct Database"
+            Show-InfoMessage "db: residential for MFProduct Database"
             Show-InfoMessage "db: inventory for Mohawk_InventoryData Database"
             Show-InfoMessage "db: mongo for Mohawk_Mongo_Data Database"
             Show-InfoMessage "db: karastan for Mohawk_Karastan Database"
@@ -47,7 +47,7 @@
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
                     break                    
                 }
-            "flooring"
+            "residential"
                 {                     
                     $databaseToRestore = "Mohawk_MFProduct"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
