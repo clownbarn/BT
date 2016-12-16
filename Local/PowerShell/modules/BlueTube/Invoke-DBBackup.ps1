@@ -268,6 +268,8 @@ Function Invoke-DBBackup {
 
         Invoke-Expression ("copy $('$backupFilePath') $($dbBackupStorageDir)\$($backupFileName)")
 
+        Invoke-Expression ("del $('$backupFilePath')")
+
 		cd $workingDir        
 	}
 }

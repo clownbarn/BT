@@ -179,7 +179,10 @@ Function Invoke-FTPDBBackup
                 
                 $webclient.Dispose();
                                 
-                Show-InfoMessage "Upload of database backup file: $($backupFileName) complete."      
+                Show-InfoMessage "Upload of database backup file: $($backupFileName) complete." 
+                
+                # Cleanup local backup file.
+                Invoke-Expression ("del $('$backupFilePath')")     
             } 
         }
         catch {
