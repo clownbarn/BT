@@ -146,7 +146,7 @@ Function Invoke-FTPDBBackup
                 # 89 is the Y key
                 if($keyInfo.VirtualKeyCode -ne 89) { 
             
-                    Show-InfoMessage "The restore operation was cancelled."
+                    Show-InfoMessage "The backup operation was cancelled."
                     return
                 }
                                         
