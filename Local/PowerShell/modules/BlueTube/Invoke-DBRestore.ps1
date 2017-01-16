@@ -32,52 +32,61 @@
         $dbBackupStorageRoot = if(![string]::IsNullOrEmpty($env:DBBACKUPSTORAGEROOT)) { $env:DBBACKUPSTORAGEROOT } else { "C:\stuff\DBBackups\" }
         $dbBackupStorageDir = "";
         $backupFileName = "";
+        
+        $_SERVICES_DB = "services"
+        $_COMMERCIAL_DB = "commercial"
+        $_RESIDENTIAL_DB = "residential"
+        $_INVENTORY_DB = "inventory"
+        $_MONGO_DB = "mongo"
+        $_KARASTAN_DB = "karastan"
+        $_DEALER_DB = "dealer"
+        $_DURKAN_DB = "durkan"
 
         switch($database)
         {
-            "services"
+            $_SERVICES_DB
                 {                     
                     $databaseToRestore = "Mohawk_Services_Dev"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Services"
                     break                    
                 }
-            "commercial"
+            $_COMMERCIAL_DB
                 {                     
                     $databaseToRestore = "Mohawk_TMGCommercial"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
                     break                    
                 }
-            "residential"
+            $_RESIDENTIAL_DB
                 {                     
                     $databaseToRestore = "Mohawk_MFProduct"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
                     break                    
                 }
-            "inventory"
+            $_INVENTORY_DB
                 {                     
                     $databaseToRestore = "Mohawk_InventoryData"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_InventoryData"
                     break                    
                 }
-            "mongo"
+            $_MONGO_DB
                 {                     
                     $databaseToRestore = "Mohawk_Mongo_Data"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Mongo_Data"
                     break                    
                 }
-            "karastan"
+            $_KARASTAN_DB
                 {                     
                     $databaseToRestore = "Mohawk_Karastan"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
                     break                    
                 }
-            "dealer"
+            $_DEALER_DB
                 {                     
                     $databaseToRestore = "Mohawk_MFDealer"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
                     break                    
                 }
-            "durkan"
+            $_DURKAN_DB
                 {                     
                     $databaseToRestore = "Mohawk_Durkan"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
@@ -94,7 +103,6 @@
 
         # First get the backup file name. This will be from the last backup done.
         $backupFiles = Get-ChildItem -path $dbBackupStorageDir -File
-
         $backupFileName = $backupFiles | sort LastWriteTime | select -last 1
         
         if(![string]::IsNullOrEmpty($backupFileName)) {
@@ -112,28 +120,38 @@
                 return
             }
         
-            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."
+            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."            
+            
+            # Second, initialize SQL SMO
+            $smoExtendedAssemblyInfo = ""
 
-            # Second, restart SQL Server to drop any open connections.
+            if(Test-Path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll") {
+            
+                Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+                $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+            }
+            else
+            {
+                Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+                $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+            }
+
+            $sqlServer = New-Object "Microsoft.SqlServer.Management.SMO.Server"
+            
+            # Third, restart SQL Server to drop any open connections.
             $sqlServiceCommand = "net stop MSSQLSERVER"
             Invoke-Expression -Command:$sqlServiceCommand
         
             $sqlServiceCommand = "net start MSSQLSERVER"
             Invoke-Expression -Command:$sqlServiceCommand
-        
-            Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
-
-            $sqlServer = New-Object "Microsoft.SqlServer.Management.SMO.Server"
                     
             if($sqlServer.databases[$databaseToRestore])
             {
                 $sqlServer.databases[$databaseToRestore].Drop()
             }
 
-            # Third, Restore the database.
-            $sqlServerName = $sqlServer.Name
-
-            $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+            # Fourth, Restore the database.
+            $sqlServerName = $sqlServer.Name            
 
             $restore = New-Object "Microsoft.SqlServer.Management.Smo.Restore, $($smoExtendedAssemblyInfo)"
             $backupDevice = New-Object "Microsoft.SqlServer.Management.Smo.BackupDeviceItem, $($smoExtendedAssemblyInfo)" ($backupFilePath, "File")
@@ -143,8 +161,7 @@
             $logicalLogFileName = $fileList.Select("Type = 'L'")[0].LogicalName
 
             $relocateData = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalDataFileName, "$($sqlServer.MasterDBPath)\$($databaseToRestore).mdf")
-            $relocateLog = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalLogFileName, "$($sqlServer.MasterDBLogPath)\$($databaseToRestore).ldf")
-            
+            $relocateLog = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalLogFileName, "$($sqlServer.MasterDBLogPath)\$($databaseToRestore).ldf")            
 
             Restore-SqlDatabase -ServerInstance $sqlServerName -Database $databaseToRestore -BackupFile $backupFilePath -RelocateFile @($relocateData,$relocateLog)
 

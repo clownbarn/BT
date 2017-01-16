@@ -249,10 +249,17 @@ Function Invoke-DBBackup {
 		}
 
 		Show-InfoMessage ("Backing Up " + $databaseToBackup + " Database...")
-		
-        Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\10.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+		        
+        if(Test-Path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll") {
+            
+            Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+        }
+        else
+        {
+            Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"            
+        }
 
-		$sqlServer = New-Object 'Microsoft.SqlServer.Management.SMO.Server' <#$inst#>
+		$sqlServer = New-Object "Microsoft.SqlServer.Management.SMO.Server"
         
         $sqlServerName = $sqlServer.Name
 		$backupdir = $sqlServer.Settings.BackupDirectory
