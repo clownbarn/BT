@@ -209,7 +209,7 @@ Function Invoke-DBBackup {
                         $databaseToBackup = "Mohawk_MFDealer_QA"
                     }
                     elseif($env -eq $_UAT) {
-                        $databaseToBackup = "MFDearlerStaging"
+                        $databaseToBackup = "MFDealerStaging"
                     }
                     elseif($env -eq $_PROD) {
                         $databaseToBackup = "MFDealer"
