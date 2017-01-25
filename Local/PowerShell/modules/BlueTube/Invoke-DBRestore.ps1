@@ -247,8 +247,7 @@
             Show-ErrorMessage "Restore failed. No backup file found!"
         }
         else {
-        {
-
+        
             $backupFilePath = "$($dbBackupStorageDir)\$($backupFileName)"
 
             Show-WarningMessage "Preparing to restore from file: $($backupFilePath). The $($databaseToRestore) database will be overwritten. To continue press Y. To quit, press any other key."
