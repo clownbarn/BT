@@ -242,7 +242,12 @@
         $backupFiles = Get-ChildItem -path $dbBackupStorageDir -File
         $backupFileName = $backupFiles | sort LastWriteTime | select -last 1
         
-        if(![string]::IsNullOrEmpty($backupFileName)) {
+        if([string]::IsNullOrEmpty($backupFileName)) {
+
+            Show-ErrorMessage "Restore failed. No backup file found!"
+        }
+        else {
+        {
 
             $backupFilePath = "$($dbBackupStorageDir)\$($backupFileName)"
 
