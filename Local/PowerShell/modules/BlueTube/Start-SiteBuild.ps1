@@ -3,7 +3,10 @@
     Param(        
         [parameter(Mandatory=$true, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()] #No value
-        [string]$siteName        
+        [string]$siteName,
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$buildConfig        
     )
     Begin {
         
@@ -12,7 +15,7 @@
         #>
         Function Show-Usage {
         
-            Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName]"  
+            Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName] -buildConfig [buildConfig]"  
             Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
             Show-InfoMessage "siteName: mohawksoa for Mohawk Services (SOA)"
             Show-InfoMessage "siteName: mohawkcommercial for Mohawk Commercial (TMG/Commercial)"
@@ -20,6 +23,8 @@
             Show-InfoMessage "siteName: karastan for Karastan Website"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
+
+            Show-InfoMessage "buildConfig: debug or release"
         }
     }
     Process {
@@ -173,7 +178,7 @@
             # Third, copy dependencies, if necessary (Not necessary for SOA itself).
             if($siteName -ne "mohawksoa")
             {
-                Invoke-MohawkDependencyCopy -siteName $siteName            
+                Invoke-MohawkDependencyCopy -siteName $siteName -buildConfig $buildConfig          
             }
 
             # Fourth, restore Nuget packages, if necessary.
@@ -198,9 +203,9 @@
                 Show-InfoMessage "Nuget package restore step complete."
             }            
 
-            # Fifth, build solution (debug for now).
+            # Fifth, build solution.
             Show-InfoMessage "Building solution..."
-            Invoke-Expression ("devenv " + $solutionName + " /build debug")
+            Invoke-Expression ("devenv " + $solutionName + " /build " + $buildConfig)
 
             if($LASTEXITCODE -or !$?) {
                             
