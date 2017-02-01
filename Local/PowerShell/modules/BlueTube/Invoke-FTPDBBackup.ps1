@@ -40,6 +40,10 @@ Function Invoke-FTPDBBackup
             Show-InfoMessage "[database]: karastan for Mohawk_Karastan Database"
             Show-InfoMessage "[database]: dealer for Mohawk_MFDealer Database"
             Show-InfoMessage "[database]: durkan for Mohawk_Durkan Database"
+            Show-InfoMessage "[database]: sitecorea for Mohawk_Sitecore_Analytics"
+            Show-InfoMessage "[database]: sitecorec for Mohawk_Sitecore_Core"
+            Show-InfoMessage "[database]: sitecorem for Mohawk_Sitecore_Master"
+            Show-InfoMessage "[database]: sitecorew for Mohawk_Sitecore_Web"
             Show-InfoMessage "Valid values for [env]: LOCAL, DEV, QA, UAT, and PROD"
 		}
 	}    
@@ -73,6 +77,10 @@ Function Invoke-FTPDBBackup
             $_KARASTAN_DB = "karastan"
             $_DEALER_DB = "dealer"
             $_DURKAN_DB = "durkan"
+            $_SITECORE_ANALYTICS_DB = "sitecorea"
+            $_SITECORE_CORE_DB = "sitecorec"
+            $_SITECORE_MASTER_DB = "sitecorem"
+            $_SITECORE_WEB_DB = "sitecorew"
 
 		    switch($database)
 		    {
@@ -114,6 +122,26 @@ Function Invoke-FTPDBBackup
                 $_DURKAN_DB
 				    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
+					    break                    
+				    }                
+                $_SITECORE_ANALYTICS_DB
+				    {   
+                        $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Analytics"
+					    break                    
+				    }
+                $_SITECORE_CORE_DB
+				    {   
+                        $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Core"
+					    break                    
+				    }
+                $_SITECORE_MASTER_DB
+				    {   
+                        $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Master"
+					    break                    
+				    }
+                $_SITECORE_WEB_DB
+				    {   
+                        $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Web"
 					    break                    
 				    }
             
@@ -191,7 +219,9 @@ Function Invoke-FTPDBBackup
         }
         finally {
 
-            cd $workingDir
+            if(![string]::IsNullOrEmpty($workingDir)) {
+                cd $workingDir
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿Function Invoke-DBRestore {
     
+    # TODO: Get the sitecore backups into one step.
+
     [cmdletbinding()]
         Param(
             [parameter(Mandatory=$true, ValueFromPipeline)]
@@ -18,14 +20,19 @@
         Function Show-Usage {
         
             Show-InfoMessage "Usage: Invoke-DBRestore -database [db]"        
-            Show-InfoMessage "db: services for Mohawk_Services_Dev Database"
-            Show-InfoMessage "db: commercial for Mohawk_TMGCommercial Database"
-            Show-InfoMessage "db: residential for MFProduct Database"
-            Show-InfoMessage "db: inventory for Mohawk_InventoryData Database"
-            Show-InfoMessage "db: mongo for Mohawk_Mongo_Data Database"
-            Show-InfoMessage "db: karastan for Mohawk_Karastan Database"
-            Show-InfoMessage "db: dealer for Mohawk_MFDealer Database"
-            Show-InfoMessage "db: durkan for Mohawk_Durkan Database"
+            Show-InfoMessage "[database]: services for Mohawk_Services_Dev Database"
+            Show-InfoMessage "[database]: commercial for Mohawk_TMGCommercial Database"
+            Show-InfoMessage "[database]: residential for MFProduct Database"
+            Show-InfoMessage "[database]: inventory for Mohawk_InventoryData Database"
+            Show-InfoMessage "[database]: mongo for Mohawk_Mongo_Data Database"
+            Show-InfoMessage "[database]: karastan for Mohawk_Karastan Database"
+            Show-InfoMessage "[database]: dealer for Mohawk_MFDealer Database"
+            Show-InfoMessage "[database]: durkan for Mohawk_Durkan Database"
+            Show-InfoMessage "[database]: sitecorea for Mohawk_Sitecore_Analytics"
+            Show-InfoMessage "[database]: sitecorec for Mohawk_Sitecore_Core"
+            Show-InfoMessage "[database]: sitecorem for Mohawk_Sitecore_Master"
+            Show-InfoMessage "[database]: sitecorew for Mohawk_Sitecore_Web"
+            Show-InfoMessage "Valid values for [env]: LOCAL, DEV, QA, UAT, and PROD"
         }
     }
     Process {
@@ -58,6 +65,10 @@
         $_KARASTAN_DB = "karastan"
         $_DEALER_DB = "dealer"
         $_DURKAN_DB = "durkan"
+        $_SITECORE_ANALYTICS_DB = "sitecorea"
+        $_SITECORE_CORE_DB = "sitecorec"
+        $_SITECORE_MASTER_DB = "sitecorem"
+        $_SITECORE_WEB_DB = "sitecorew"
 
         switch($database)
         {
@@ -228,6 +239,90 @@
 
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
                     break                    
+                }
+            $_SITECORE_ANALYTICS_DB
+                {
+                    if($env -eq $_LOCAL) {
+					    $databaseToRestore = "Mohawk_Sitecore_Analytics"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToRestore = "Mohawk_Sitecore_Analytics_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToRestore = "Mohawk_Sitecore_Analytics_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToRestore = "Mohawk_Sitecore_Analytics_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToRestore = "Mohawk_Durkan"
+                    }
+
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Analytics"
+					break
+                }
+            $_SITECORE_CORE_DB
+                {
+                    if($env -eq $_LOCAL) {
+					    $databaseToRestore = "Mohawk_Sitecore_Core"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToRestore = "Mohawk_Sitecore_Core_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToRestore = "Mohawk_Sitecore_Core_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToRestore = "Mohawk_Sitecore_Core_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToRestore = "Mohawk_Sitecore_Core"
+                    }
+
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Core"
+					break
+                }
+            $_SITECORE_MASTER_DB
+                {
+                    if($env -eq $_LOCAL) {
+					    $databaseToRestore = "Mohawk_Sitecore_Master"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToRestore = "Mohawk_Sitecore_Master_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToRestore = "Mohawk_Sitecore_Master_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToRestore = "Mohawk_Sitecore_Master_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToRestore = "Mohawk_Sitecore_Master"
+                    }
+
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Master"
+					break
+                }
+            $_SITECORE_WEB_DB
+                {
+                    if($env -eq $_LOCAL) {
+					    $databaseToRestore = "Mohawk_Sitecore_Web"
+                    }
+                    elseif($env -eq $_DEV) {
+					    $databaseToRestore = "Mohawk_Sitecore_Web_DEV"
+                    }
+                    elseif($env -eq $_QA) {
+                        $databaseToRestore = "Mohawk_Sitecore_Web_QA"
+                    }
+                    elseif($env -eq $_UAT) {
+                        $databaseToRestore = "Mohawk_Sitecore_Web_STG"
+                    }
+                    elseif($env -eq $_PROD) {
+                        $databaseToRestore = "Mohawk_Sitecore_Web"
+                    }
+
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Web"
+					break
                 }
             
 
