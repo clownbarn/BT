@@ -18,11 +18,11 @@
             Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName] -buildConfig [buildConfig]"  
             Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
             Show-InfoMessage "siteName: mohawksoa for Mohawk Services (SOA)"
-            Show-InfoMessage "siteName: mohawkcommercial for Mohawk Commercial (TMG/Commercial)"
+            Show-InfoMessage "siteName: mohawksitecore for Mohawk Sitecore Shell"
             Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
-            Show-InfoMessage "siteName: karastan for Karastan Website"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
+            Show-InfoMessage "siteName: tmg for Mohawk Commercial (TMG/Commercial)"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -33,6 +33,7 @@
 
             $currentDir = (Get-Item -Path ".\" -Verbose).FullName
             $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
+            $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:MOHAWKSITECOREPROJPATH)) { $env:MOHAWKSITECOREPROJPATH } else { "C:\mss\" }
             $projectDirRoot = ""
             $solutionDir = ""
             $solutionName = ""
@@ -74,7 +75,7 @@
                     break                    
                 }
 
-                "mohawkcommercial" {                     
+                "tmg" {                     
                     
                     Show-InfoMessage "Starting Mohawk Commercial (TMG/Commercial) solution build..."
 
@@ -88,36 +89,35 @@
                     break                    
                 }
 
+                "mohawksitecore" {
+                    
+                    Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
+                    
+                    $projectDirRoot = $sitecoreWorkingDirRoot + "dotNet\Mohawk.SitecoreShell.Framework"
+                    $solutionDir = $sitecoreWorkingDirRoot
+                    $solutionName = "Mohawk.SitecoreShell.Website.sln"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
                 "mohawkgroup" {                     
                     
                     Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
 
-                    $projectDirRoot = $workingDirRoot + "mohawk-group-website"
-                    $solutionDir = $projectDirRoot + "\dotnet"
+                    $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
+                    $solutionDir = $projectDirRoot
                     $solutionName = "Mohawk.Commercial.Website.sln"
-                    $gulpDir = $projectDirRoot + "\inetpub\PresentationLayer"                              
+                    $gulpDir = $projectDirRoot + "\PresentationLayer"                              
                     $packageDir = $solutionDir + "\packages"
 
-                    $doPreDeployStep = $TRUE
+                    $doPreDeployStep = $FALSE
 
                     break                    
                 }
-
-                "karastan" {                     
-                    
-                    Show-InfoMessage "Starting Karastan solution build..."
-
-                    $projectDirRoot = $workingDirRoot + "mohawk-karastan-website"
-                    $solutionDir = $projectDirRoot + "\dotnet"
-                    $solutionName = "Mohawk.Karastan.Website.sln"
-                    $gulpDir = $projectDirRoot + "\inetpub\PresentationLayer"                              
-                    $packageDir = $solutionDir + "\packages"
-
-                    $doPreDeployStep = $TRUE
-
-                    break                    
-                }
-
+                
                 "rrts" {                     
                     
                     Show-InfoMessage "Starting Mohawk Residential Ready To Ship solution build..."
@@ -176,7 +176,7 @@
             }            
 
             # Third, copy dependencies, if necessary (Not necessary for SOA itself).
-            if($siteName -ne "mohawksoa")
+            if($siteName -ne "mohawksoa" -and $siteName -ne "mohawksitecore")
             {
                 Invoke-MohawkDependencyCopy -siteName $siteName -buildConfig $buildConfig          
             }

@@ -17,11 +17,10 @@
         
             Show-InfoMessage "Usage: Invoke-MohawkDependencyCopy -siteName [siteName] -buildConfig [buildConfig]"  
             Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
-            Show-InfoMessage "siteName: mohawkcommercial for Mohawk Commercial (TMG/Commercial)"
             Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
-            Show-InfoMessage "siteName: karastan for Karastan Website"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
+            Show-InfoMessage "siteName: tmg for Mohawk Commercial (TMG/Commercial)"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -30,6 +29,7 @@
             
         $currentDir = (Get-Item -Path ".\" -Verbose).FullName
         $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
+        $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:MOHAWKSITECOREPROJPATH)) { $env:MOHAWKSITECOREPROJPATH } else { "C:\mss\" }
         $projectDirRoot = ""
         $solutionDir = ""
         $dependencySourceDirs = @()
@@ -49,7 +49,7 @@
                 break                    
             }                
 
-            "mohawkcommercial" {                     
+            "tmg" {                     
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Commercial (TMG/Commercial)..."
 
@@ -65,25 +65,13 @@
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Commercial Website (Redesign)..."
 
-                $projectDirRoot = $workingDirRoot + "mohawk-group-website"
-                $solutionDir = $projectDirRoot + "\dotnet"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
-                $dependencyDestDir = $solutionDir + "\dependencies\Mohawk SOA"
-                
+                $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
+                $solutionDir = $projectDirRoot
+                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
+                $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk SOA"
+                                
                 break                    
-            }
-
-            "karastan" {                     
-                    
-                Show-InfoMessage "Getting Dependencies for Karastan..."
-
-                $projectDirRoot = $workingDirRoot + "mohawk-karastan-website"
-                $solutionDir = $projectDirRoot + "\dotnet"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
-                $dependencyDestDir = $solutionDir + "\dependencies\Mohawk SOA"
-                
-                break                    
-            }
+            }            
 
             "rrts" {                     
                     
@@ -127,7 +115,7 @@
 
             foreach ($dependencyPath in $dependencySourceDirs) {
                 Show-InfoMessage "Copying path contents from $dependencyPath to $dependencyDestDir"
-                Invoke-Expression ("robocopy " + $dependencyPath + " " + $dependencyDestDir + " /XF *.config *.xml")
+                Invoke-Expression ("robocopy " + $dependencyPath + " " + '$dependencyDestDir' + " /XF *.config *.xml")
             }
 
             Show-InfoMessage "Dependency copy step complete."
