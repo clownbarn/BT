@@ -204,10 +204,10 @@
 					    $databaseToRestore = "Mohawk_MFDealer"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_MFDealer_DEV"
+					    $databaseToRestore = "MFDealer_DEV"
                     }
                     elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_MFDealer_QA"
+                        $databaseToRestore = "MFDealer_QA"
                     }
                     elseif($env -eq $_UAT) {
                         $databaseToRestore = "MFDealerStaging"
