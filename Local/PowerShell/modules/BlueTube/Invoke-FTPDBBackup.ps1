@@ -26,17 +26,17 @@ Function Invoke-FTPDBBackup
             )
     Begin {
         
-		<#
-			Helper function to show usage of cmdlet.
-		#>
-		Function Show-Usage {
+        <#
+            Helper function to show usage of cmdlet.
+        #>
+        Function Show-Usage {
         
-			Show-InfoMessage "Usage: Invoke-FTPDBBackup -database [database] -env [env]"        
-			Show-InfoMessage "[database]: services for Mohawk_Services Database"
+            Show-InfoMessage "Usage: Invoke-FTPDBBackup -database [database] -env [env]"        
+            Show-InfoMessage "[database]: services for Mohawk_Services Database"
             Show-InfoMessage "[database]: commercial for Mohawk_TMGCommercial Database"
-			Show-InfoMessage "[database]: residential for MFProduct Database"
-			Show-InfoMessage "[database]: inventory for Mohawk_InventoryData Database"
-			Show-InfoMessage "[database]: mongo for Mohawk_Mongo_Data Database"
+            Show-InfoMessage "[database]: residential for MFProduct Database"
+            Show-InfoMessage "[database]: inventory for Mohawk_InventoryData Database"
+            Show-InfoMessage "[database]: mongo for Mohawk_Mongo_Data Database"
             Show-InfoMessage "[database]: karastan for Mohawk_Karastan Database"
             Show-InfoMessage "[database]: dealer for Mohawk_MFDealer Database"
             Show-InfoMessage "[database]: durkan for Mohawk_Durkan Database"
@@ -45,8 +45,8 @@ Function Invoke-FTPDBBackup
             Show-InfoMessage "[database]: sitecorem for Mohawk_Sitecore_Master"
             Show-InfoMessage "[database]: sitecorew for Mohawk_Sitecore_Web"
             Show-InfoMessage "Valid values for [env]: LOCAL, DEV, QA, UAT, and PROD"
-		}
-	}    
+        }
+    }    
     Process {
         
         try {
@@ -61,8 +61,8 @@ Function Invoke-FTPDBBackup
             if(!(($env -eq $_LOCAL) -or ($env -eq $_DEV) -or ($env -eq $_QA) -or ($env -eq $_UAT) -or ($env -eq $_PROD))) {
 
                 Show-InfoMessage "Invalid environment specified."
-			    Show-Usage
-			    return
+                Show-Usage
+                return
             }
                         
             $workingDir = (Get-Item -Path ".\" -Verbose).FullName
@@ -82,76 +82,76 @@ Function Invoke-FTPDBBackup
             $_SITECORE_MASTER_DB = "sitecorem"
             $_SITECORE_WEB_DB = "sitecorew"
 
-		    switch($database)
-		    {
-			    $_SERVICES_DB
-				    {
+            switch($database)
+            {
+                $_SERVICES_DB
+                    {
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Services"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_COMMERCIAL_DB
-				    { 
+                    { 
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
-					    break                    
-				    }
-			    $_RESIDENTIAL_DB
-				    {  
+                        break                    
+                    }
+                $_RESIDENTIAL_DB
+                    {  
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
-					    break                    
-				    }
-			    $_INVENTORY_DB
-				    {
+                        break                    
+                    }
+                $_INVENTORY_DB
+                    {
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_InventoryData"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_MONGO_DB
-				    {  
+                    {  
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Mongo_Data"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_KARASTAN_DB
-				    {  
+                    {  
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_DEALER_DB
-				    {   
+                    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_DURKAN_DB
-				    {   
+                    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
-					    break                    
-				    }                
+                        break                    
+                    }                
                 $_SITECORE_ANALYTICS_DB
-				    {   
+                    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Analytics"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_SITECORE_CORE_DB
-				    {   
+                    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Core"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_SITECORE_MASTER_DB
-				    {   
+                    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Master"
-					    break                    
-				    }
+                        break                    
+                    }
                 $_SITECORE_WEB_DB
-				    {   
+                    {   
                         $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Web"
-					    break                    
-				    }
+                        break                    
+                    }
             
 
-			    default {
-				    Show-InfoMessage "Invalid Database"
-				    Show-Usage
-				    return
-			    }
-		    }
+                default {
+                    Show-InfoMessage "Invalid Database"
+                    Show-Usage
+                    return
+                }
+            }
             
             # First back up the SQL Server Database
             Invoke-DBBackup -database $database -env $env
