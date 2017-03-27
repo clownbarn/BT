@@ -5,7 +5,7 @@
 #
 # Example Usage: Invoke-FTPDBBackup -database services -env LOCAL
 #
-# Valid Values for -database: services, commercial, residential, inventory, mongo, karastan, dealer, durkan
+# Valid Values for -database: services, commercial, residential, inventory, mongo, karastan, dealer, durkan, sitecorea, sitecorec, sitecorem, sitecorew
 # Valid values for -env: LOCAL, DEV, QA, UAT, and PROD
 #
 # Environment variables required: 
