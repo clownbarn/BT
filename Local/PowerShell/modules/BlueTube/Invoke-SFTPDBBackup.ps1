@@ -10,7 +10,7 @@
 # Valid Values for -database: services, commercial, residential, inventory, mongo, karastan, dealer, durkan
 # Valid values for -env: LOCAL, DEV, QA, UAT, and PROD
 #
-# Environment variable required: 
+# Environment variables required: 
 #    BTFTP must be set to the address of the sftp server, ie. sftp://lfsftp.perficient.com/
 #    BTFTPUSER must be set to the user name for the sftp server.
 #    BTFTPPWD must be set to the user password for the sftp server.
@@ -232,22 +232,17 @@ Function Invoke-SFTPDBBackup
                     # Throw on any error
                     $transferResult.Check()
  
-                    # Print results
-                    foreach ($transfer in $transferResult.Transfers)
-                    {
-                        Write-Host ("Upload of {0} succeeded" -f $transfer.FileName)
-                    }
+                    Show-InfoMessage "Upload of database backup file: $($backupFileName) complete." 
+                
+                    # Cleanup local backup file.
+                    Invoke-Expression ("del $('$backupFilePath')")
+                        
                 }
                 finally
                 {
                     # Disconnect, clean up
                     $session.Dispose()
-                }
-                                
-                Show-InfoMessage "Upload of database backup file: $($backupFileName) complete." 
-                
-                # Cleanup local backup file.
-                Invoke-Expression ("del $('$backupFilePath')")     
+                }   
             } 
         }
         catch {
