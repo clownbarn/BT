@@ -93,7 +93,7 @@
                     
                     Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
                     
-                    $projectDirRoot = $sitecoreWorkingDirRoot + "dotNet\Mohawk.SitecoreShell.Framework"
+                    $projectDirRoot = $sitecoreWorkingDirRoot #+ "dotNet\Mohawk.SitecoreShell.Framework"
                     $solutionDir = $sitecoreWorkingDirRoot
                     $solutionName = "Mohawk.SitecoreShell.Website.sln"
                     $packageDir = $solutionDir + "\packages"
