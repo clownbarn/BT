@@ -1,7 +1,7 @@
 ﻿# Invoke-SFTPDBBackup is a Powershell Cmdlet that backs up a specified
 # Mohawk database for a specified environment and uploads the backup file to the SFTP server.
 # 
-# Interally, the backup is performed using the Invoke-DBBackup CmdLet.
+# Internally, the backup is performed using the Invoke-DBBackup CmdLet.
 #
 # This CmdLet has a dependency on WinSCP: https://winscp.net/eng/index.php
 #

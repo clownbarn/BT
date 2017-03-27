@@ -1,14 +1,14 @@
 ﻿# Invoke-FTPDBBackup is a Powershell Cmdlet that backs up a specified
 # Mohawk database for a specified environment and uploads the backup file to the FTP server.
 # 
-# Interally, the backup is performed using the Invoke-DBBackup CmdLet.
+# Internally, the backup is performed using the Invoke-DBBackup CmdLet.
 #
 # Example Usage: Invoke-FTPDBBackup -database services -env LOCAL
 #
 # Valid Values for -database: services, commercial, residential, inventory, mongo, karastan, dealer, durkan
 # Valid values for -env: LOCAL, DEV, QA, UAT, and PROD
 #
-# Environment variable required: 
+# Environment variables required: 
 #    BTFTP must be set to the address of the ftp server, ie. ftp://ftp.hq.bluetubeinc.com/
 #    BTFTPUSER must be set to the user name for the ftp server.
 #    BTFTPPWD must be set to the user password for the ftp server.
