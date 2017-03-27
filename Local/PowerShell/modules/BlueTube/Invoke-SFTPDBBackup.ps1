@@ -14,7 +14,7 @@
 #    BTFTP must be set to the address of the sftp server, ie. sftp://lfsftp.perficient.com/
 #    BTFTPUSER must be set to the user name for the sftp server.
 #    BTFTPPWD must be set to the user password for the sftp server.
-#	 BTSSHHOSTKEYFINGERPRINT must be set to the value of the SSH Host Key Fingerprint for the SFTP server.
+#    BTSSHHOSTKEYFINGERPRINT must be set to the value of the SSH Host Key Fingerprint for the SFTP server.
   
 Function Invoke-SFTPDBBackup
 {
