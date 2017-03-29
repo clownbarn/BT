@@ -16,14 +16,14 @@
 Function Invoke-FTPDBBackup
 {
     [cmdletbinding()]
-        Param(
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$database,  
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$env   
-            )
+    Param(
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$database,  
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$env   
+        )
     Begin {
         
         <#
