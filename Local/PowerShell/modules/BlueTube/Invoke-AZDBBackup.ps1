@@ -1,19 +1,25 @@
-﻿# Invoke-FTPDBBackup is a Powershell Cmdlet that backs up a specified
-# Mohawk database for a specified environment and uploads the backup file to the FTP server.
+﻿# Invoke-AZDBBackup is a Powershell Cmdlet that backs up a specified
+# Mohawk database for a specified environment and uploads the backup file to Mohawk Azure Storage Account.
 # 
 # Internally, the backup is performed using the Invoke-DBBackup CmdLet.
 #
-# Example Usage: Invoke-FTPDBBackup -database services -env LOCAL
+# This script has a dependency on the AzCopy Executable, which must be in the PATH
+# Environment Variable where this script is used.
+#
+# AzCopy can be obtained here: http://aka.ms/downloadazcopy
+# 
+# Once installed, ensure the executable is in the PATH Environment Variable. The default installation
+# path for AzCopy is typically : %PROGRAMFILES(X86)%\Microsoft SDKs\Azure\AzCopy
+#
+# Example Usage: Invoke-AZDBBackup -database services -env LOCAL
 #
 # Valid Values for -database: services, commercial, residential, inventory, mongo, karastan, dealer, durkan, sitecorea, sitecorec, sitecorem, sitecorew
 # Valid values for -env: LOCAL, DEV, QA, UAT, and PROD
 #
-# Environment variables required: 
-#    BTFTP must be set to the address of the ftp server, ie. ftp://ftp.hq.bluetubeinc.com/
-#    BTFTPUSER must be set to the user name for the ftp server.
-#    BTFTPPWD must be set to the user password for the ftp server.
+# Environment variable required: 
+#    MOHAWKKEY must be set to the value of the key for the Mohawk Storage Account
   
-Function Invoke-FTPDBBackup
+Function Invoke-AZDBBackup
 {
     [cmdletbinding()]
     Param(
@@ -31,7 +37,7 @@ Function Invoke-FTPDBBackup
         #>
         Function Show-Usage {
         
-            Show-InfoMessage "Usage: Invoke-FTPDBBackup -database [database] -env [env]"        
+            Show-InfoMessage "Usage: Invoke-AZDBBackup -database [database] -env [env]"        
             Show-InfoMessage "[database]: services for Mohawk_Services Database"
             Show-InfoMessage "[database]: commercial for Mohawk_TMGCommercial Database"
             Show-InfoMessage "[database]: residential for MFProduct Database"
@@ -180,35 +186,19 @@ Function Invoke-FTPDBBackup
                                         
                 Show-InfoMessage "Uploading database backup file: $($backupFileName)..."
 
-                cd $dbBackupStorageDir            
+                $blobRoot = "https://mohawk.blob.core.windows.net/"
+                $destBlob = "$($blobRoot)database-backup/"
+                $accessKey = $env:MOHAWKKEY
 
-                # ftp server address and credentials
-                $ftp = $env:BTFTP 
-                $user = $env:BTFTPUSER
-                $pwd = $env:BTFTPPWD
-
-                if([string]::IsNullOrEmpty($ftp)) {
-                    throw "The BTFTP environment variable has not been set to the FTP server address."
+                if([string]::IsNullOrEmpty($accessKey)) {
+                    throw "The MOHAWKCDNKEY Environment Variable has not been set."
                 }
 
-                if([string]::IsNullOrEmpty($user)) {
-                    throw "The BTFTPUSER environment variable has not been set to the FTP user name."
-                }
-
-                if([string]::IsNullOrEmpty($pwd)) {
-                    throw "The BTFTPPWD environment variable has not been set to the FTP user password."
-                }
-        
-                # File upload
-                $webclient = New-Object System.Net.WebClient
-                $webclient.Credentials = New-Object System.Net.NetworkCredential($user,$pwd)  
-                $uri = New-Object System.Uri($ftp + $backupFileName) 
-                $webclient.UploadFile($uri, $backupFilePath) 
-                
-                $webclient.Dispose();
-                                
+                # Upload file to Mohawk Storage Account with AzCopy
+                Invoke-Expression ("AzCopy /Source:$($dbBackupStorageDir) /Pattern:$($backupFileName) /Dest:$($destBlob) /DestKey:$($accessKey) /Y")
+                                               
                 Show-InfoMessage "Upload of database backup file: $($backupFileName) complete." 
-                
+                                
                 # Cleanup local backup file.
                 Invoke-Expression ("del $('$backupFilePath')")     
             } 
