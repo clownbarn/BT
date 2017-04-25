@@ -47,8 +47,8 @@
         if(!(($env -eq $_LOCAL) -or ($env -eq $_DEV) -or ($env -eq $_QA) -or ($env -eq $_UAT) -or ($env -eq $_PROD))) {
 
             Show-InfoMessage "Invalid environment specified."
-			Show-Usage
-			return
+            Show-Usage
+            return
         }
 
         $workingDir = (Get-Item -Path ".\" -Verbose).FullName
@@ -75,10 +75,10 @@
             $_SERVICES_DB
                 {
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Services_Dev"
+                        $databaseToRestore = "Mohawk_Services_Dev"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Services_Dev"
+                        $databaseToRestore = "Mohawk_Services_Dev"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Services_QA"
@@ -96,10 +96,10 @@
             $_COMMERCIAL_DB
                 {   
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_TMGCommercial"
+                        $databaseToRestore = "Mohawk_TMGCommercial"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "TMGCommercial_DEV"
+                        $databaseToRestore = "TMGCommercial_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "TMGCommercial_QA"
@@ -117,10 +117,10 @@
             $_RESIDENTIAL_DB
                 {                     
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_MFProduct"
+                        $databaseToRestore = "Mohawk_MFProduct"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "MFProduct_DEV"
+                        $databaseToRestore = "MFProduct_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "MFProduct_QA"
@@ -138,10 +138,10 @@
             $_INVENTORY_DB
                 {                     
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_InventoryData"
+                        $databaseToRestore = "Mohawk_InventoryData"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_InventoryData_DEV"
+                        $databaseToRestore = "Mohawk_InventoryData_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_InventoryData_QA"
@@ -159,10 +159,10 @@
             $_MONGO_DB
                 {                     
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Mongo_Data"
+                        $databaseToRestore = "Mohawk_Mongo_Data"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Mongo_Data_DEV"
+                        $databaseToRestore = "Mohawk_Mongo_Data_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Mongo_Data_QA"
@@ -180,10 +180,10 @@
             $_KARASTAN_DB
                 {                     
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Karastan"
+                        $databaseToRestore = "Mohawk_Karastan"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Karastan_DEV"
+                        $databaseToRestore = "Mohawk_Karastan_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Karastan_QA"
@@ -201,10 +201,10 @@
             $_DEALER_DB
                 {                     
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_MFDealer"
+                        $databaseToRestore = "Mohawk_MFDealer"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "MFDealer_DEV"
+                        $databaseToRestore = "MFDealer_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "MFDealer_QA"
@@ -222,10 +222,10 @@
             $_DURKAN_DB
                 {                     
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Durkan"
+                        $databaseToRestore = "Mohawk_Durkan"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Durkan_DEV"
+                        $databaseToRestore = "Mohawk_Durkan_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Durkan_QA"
@@ -243,10 +243,10 @@
             $_SITECORE_ANALYTICS_DB
                 {
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Sitecore_Analytics"
+                        $databaseToRestore = "Mohawk_Sitecore_Analytics"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Sitecore_Analytics_DEV"
+                        $databaseToRestore = "Mohawk_Sitecore_Analytics_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Sitecore_Analytics_QA"
@@ -259,15 +259,15 @@
                     }
 
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Analytics"
-					break
+                    break
                 }
             $_SITECORE_CORE_DB
                 {
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Sitecore_Core"
+                        $databaseToRestore = "Mohawk_Sitecore_Core"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Sitecore_Core_DEV"
+                        $databaseToRestore = "Mohawk_Sitecore_Core_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Sitecore_Core_QA"
@@ -280,15 +280,15 @@
                     }
 
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Core"
-					break
+                    break
                 }
             $_SITECORE_MASTER_DB
                 {
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Sitecore_Master"
+                        $databaseToRestore = "Mohawk_Sitecore_Master"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Sitecore_Master_DEV"
+                        $databaseToRestore = "Mohawk_Sitecore_Master_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Sitecore_Master_QA"
@@ -301,15 +301,15 @@
                     }
 
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Master"
-					break
+                    break
                 }
             $_SITECORE_WEB_DB
                 {
                     if($env -eq $_LOCAL) {
-					    $databaseToRestore = "Mohawk_Sitecore_Web"
+                        $databaseToRestore = "Mohawk_Sitecore_Web"
                     }
                     elseif($env -eq $_DEV) {
-					    $databaseToRestore = "Mohawk_Sitecore_Web_DEV"
+                        $databaseToRestore = "Mohawk_Sitecore_Web_DEV"
                     }
                     elseif($env -eq $_QA) {
                         $databaseToRestore = "Mohawk_Sitecore_Web_QA"
@@ -322,7 +322,7 @@
                     }
 
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Web"
-					break
+                    break
                 }
             
 
@@ -360,7 +360,7 @@
             
             # Second, initialize SQL SMO
             $smoExtendedAssemblyInfo = ""			
-			
+            
             if(Test-Path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll") {
       
                 #Show-InfoMessage "Adding Type: C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"

@@ -1,13 +1,13 @@
 ﻿Function Restart-AppPool {
     
-	[cmdletbinding()]
-		Param(
-			[parameter(Mandatory=$true, ValueFromPipeline)]
-			[ValidateNotNullOrEmpty()] #No value
-			[string]$appPool
-			)
+    [cmdletbinding()]
+        Param(
+            [parameter(Mandatory=$true, ValueFromPipeline)]
+            [ValidateNotNullOrEmpty()] #No value
+            [string]$appPool
+            )
             
-	Begin {
+    Begin {
         
         <#
             Helper function to show usage of cmdlet.
@@ -22,13 +22,13 @@
             Show-InfoMessage "siteName: karastan for Karastan Website"
         }
     }
-	Process {
-        	
+    Process {
+            
         $site = ""
 
-		switch($appPool)
-		{
-			"mohawkflooring" {                     
+        switch($appPool)
+        {
+            "mohawkflooring" {                     
                     
                 $site = "dev.mohawkflooring.local"
                 break                    
@@ -64,7 +64,7 @@
                 Show-Usage
                 return
             }
-		}
+        }
         
         Show-InfoMessage "Restarting $($appPool) App Pool..."                               
 
