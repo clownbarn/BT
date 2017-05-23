@@ -18,7 +18,8 @@
             Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName] -buildConfig [buildConfig]"  
             Show-InfoMessage "siteName: soa for Mohawk Services (SOA)"
             Show-InfoMessage "siteName: sitecoreshell for Mohawk Sitecore Shell"
-            Show-InfoMessage "siteName: flooringlegacy for Mohawk Flooring (Legacy)"
+            Show-InfoMessage "siteName: flooring for Mohawk Flooring Website (Redesign)"
+            Show-InfoMessage "siteName: flooringlegacy for Mohawk Flooring Website (Legacy)"
             Show-InfoMessage "siteName: tmg Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
@@ -160,10 +161,25 @@
 
                     break
                 }
+
+                "flooring" {                     
+                    
+                    Show-InfoMessage "Starting Mohawk Flooring Website (Conversion) solution build..."
+
+                    $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.Flooring.Sitecore.sln"
+                    $gulpDir = $projectDirRoot + "\PresentationLayer"                              
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break                    
+                }
                         
                 default {
 
-                    Show-InfoMessage "Invalid Site Name!"
+                    Show-InfoMessage ("Invalid Site Name! " + $siteName)
                     Show-Usage
                     return
                 }

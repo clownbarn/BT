@@ -16,7 +16,8 @@
         Function Show-Usage {
         
             Show-InfoMessage "Usage: Invoke-MohawkDependencyCopy -siteName [siteName] -buildConfig [buildConfig]"  
-            Show-InfoMessage "siteName: flooringlegacy for Mohawk Flooring (Residential)"
+            Show-InfoMessage "siteName: flooring for Mohawk Flooring Website (Conversion)"
+            Show-InfoMessage "siteName: flooringlegacy for Mohawk Flooring Website (Legacy)"
             Show-InfoMessage "siteName: tmg Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
@@ -36,7 +37,19 @@
         $dependencyDestDir = ""
 
         switch($siteName) {
-                
+
+            "flooring" {                     
+                    
+                Show-InfoMessage "Getting Dependencies for Mohawk Flooring Website (Redesign)..."
+
+                $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
+                $solutionDir = $projectDirRoot
+                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
+                $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk-SOA"
+                                
+                break                    
+            }
+
             "flooringlegacy" {                     
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Flooring (Legacy)..."
@@ -106,7 +119,7 @@
         }
 
         # Step 1: Build SOA
-        Start-SiteBuild -siteName mohawksoa -buildConfig $buildConfig
+        Start-SiteBuild -siteName soa -buildConfig $buildConfig
 
         # Step 2, copy dependencies
         if($dependencySourceDirs.length -ne 0) {
@@ -120,6 +133,5 @@
 
             Show-InfoMessage "Dependency copy step complete."
         }
-    }        
-    
+    }
 }
