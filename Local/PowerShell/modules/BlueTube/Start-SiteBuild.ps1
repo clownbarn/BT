@@ -23,6 +23,7 @@
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
             Show-InfoMessage "siteName: tmg for Mohawk Commercial (TMG/Commercial)"
+            Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -145,6 +146,20 @@
 
                     break                    
                 }
+
+                "viz" {
+                    
+                    Show-InfoMessage "Starting Mohawk Product Visualizer solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-product-visualization"
+                    $solutionDir = $projectDirRoot  
+                    $solutionName = "FlooringInstallMethodGenerator.sln"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
                         
                 default {
 
@@ -154,7 +169,7 @@
                 }
             }
 
-            cd $solutionDir
+            Set-Location $solutionDir
         
             # First, perform a clean.
             Show-InfoMessage "Performing clean..."
@@ -176,7 +191,7 @@
             }            
 
             # Third, copy dependencies, if necessary (Not necessary for SOA itself).
-            if($siteName -ne "mohawksoa" -and $siteName -ne "mohawksitecore")
+            if($siteName -ne "mohawksoa" -and $siteName -ne "mohawksitecore" -and $siteName -ne "viz")
             {
                 Invoke-MohawkDependencyCopy -siteName $siteName -buildConfig $buildConfig          
             }
@@ -219,7 +234,7 @@
                 
                 Show-InfoMessage "Performing Grunt build step..."
 
-                cd $gruntDir
+                Set-Location $gruntDir
 
                 Invoke-Expression ("grunt build:prod --force")
 
@@ -242,7 +257,7 @@
                 
                 Show-InfoMessage "Performing Gulp build step..."
 
-                cd $gulpDir
+                Set-Location $gulpDir
 
                 Invoke-Expression ("gulp build")
 
@@ -264,7 +279,7 @@
         }
         finally {
 
-            cd $currentDir
+            Set-Location $currentDir
         }
     }
 }
