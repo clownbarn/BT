@@ -16,18 +16,18 @@
         Function Show-Usage {
         
             Show-InfoMessage "Usage: Invoke-MohawkDependencyCopy -siteName [siteName] -buildConfig [buildConfig]"  
-            Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
-            Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
+            Show-InfoMessage "siteName: flooringlegacy for Mohawk Flooring (Residential)"
+            Show-InfoMessage "siteName: tmg Mohawk Commercial Website (Redesign)"
+            Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
-            Show-InfoMessage "siteName: tmg for Mohawk Commercial (TMG/Commercial)"
-
+            
             Show-InfoMessage "buildConfig: debug or release"
         }
     }
     Process {                    
             
-        $currentDir = (Get-Item -Path ".\" -Verbose).FullName
+        #$currentDir = (Get-Item -Path ".\" -Verbose).FullName
         $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
         $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:MOHAWKSITECOREPROJPATH)) { $env:MOHAWKSITECOREPROJPATH } else { "C:\mss\" }
         $projectDirRoot = ""
@@ -37,9 +37,9 @@
 
         switch($siteName) {
                 
-            "mohawkflooring" {                     
+            "flooringlegacy" {                     
                     
-                Show-InfoMessage "Getting Dependencies for Mohawk Flooring (Residential)..."
+                Show-InfoMessage "Getting Dependencies for Mohawk Flooring (Legacy)..."
 
                 $projectDirRoot = $workingDirRoot + "mohawk"
                 $solutionDir = $projectDirRoot + "\MohawkFlooring"
@@ -49,9 +49,9 @@
                 break                    
             }                
 
-            "tmg" {                     
+            "tmglegacy" {                     
                     
-                Show-InfoMessage "Getting Dependencies for Mohawk Commercial (TMG/Commercial)..."
+                Show-InfoMessage "Getting Dependencies for Mohawk Commercial Website (Legacy)..."
 
                 $projectDirRoot = $workingDirRoot + "mohawk-group"
                 $solutionDir = $projectDirRoot + "\projects\TMG\trunk"
@@ -61,7 +61,7 @@
                 break                    
             }
 
-            "mohawkgroup" {                     
+            "tmg" {                     
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Commercial Website (Redesign)..."
 

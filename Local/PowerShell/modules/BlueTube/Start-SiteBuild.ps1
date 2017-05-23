@@ -16,13 +16,13 @@
         Function Show-Usage {
         
             Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName] -buildConfig [buildConfig]"  
-            Show-InfoMessage "siteName: mohawkflooring for Mohawk Flooring (Residential)"
-            Show-InfoMessage "siteName: mohawksoa for Mohawk Services (SOA)"
-            Show-InfoMessage "siteName: mohawksitecore for Mohawk Sitecore Shell"
-            Show-InfoMessage "siteName: mohawkgroup Mohawk Commercial Website (Redesign)"
+            Show-InfoMessage "siteName: soa for Mohawk Services (SOA)"
+            Show-InfoMessage "siteName: sitecoreshell for Mohawk Sitecore Shell"
+            Show-InfoMessage "siteName: flooringlegacy for Mohawk Flooring (Legacy)"
+            Show-InfoMessage "siteName: tmg Mohawk Commercial Website (Redesign)"
+            Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
-            Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
-            Show-InfoMessage "siteName: tmg for Mohawk Commercial (TMG/Commercial)"
+            Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"            
             Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
 
             Show-InfoMessage "buildConfig: debug or release"
@@ -47,9 +47,9 @@
 
             switch($siteName) {
                 
-                "mohawkflooring" {                     
+                "flooringlegacy" {                     
                     
-                    Show-InfoMessage "Starting Mohawk Flooring (Residential) solution build..."
+                    Show-InfoMessage "Starting Mohawk Flooring (Legacy) solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk"
                     $solutionDir = $projectDirRoot + "\MohawkFlooring"
@@ -62,7 +62,7 @@
                     break                    
                 }
 
-                "mohawksoa" {                     
+                "soa" {                     
                     
                     Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
 
@@ -76,9 +76,9 @@
                     break                    
                 }
 
-                "tmg" {                     
+                "tmglegacy" {                     
                     
-                    Show-InfoMessage "Starting Mohawk Commercial (TMG/Commercial) solution build..."
+                    Show-InfoMessage "Starting Mohawk Commercial Website (Legacy) solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-group"
                     $solutionDir = $projectDirRoot + "\projects\TMG\trunk"
@@ -90,7 +90,7 @@
                     break                    
                 }
 
-                "mohawksitecore" {
+                "sitecoreshell" {
                     
                     Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
                     
@@ -104,7 +104,7 @@
                     break
                 }
 
-                "mohawkgroup" {                     
+                "tmg" {                     
                     
                     Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
 
@@ -191,7 +191,7 @@
             }            
 
             # Third, copy dependencies, if necessary (Not necessary for SOA itself).
-            if($siteName -ne "mohawksoa" -and $siteName -ne "mohawksitecore" -and $siteName -ne "viz")
+            if($siteName -ne "soa" -and $siteName -ne "sitecoreshell" -and $siteName -ne "viz")
             {
                 Invoke-MohawkDependencyCopy -siteName $siteName -buildConfig $buildConfig          
             }
