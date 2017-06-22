@@ -23,7 +23,7 @@
             Show-InfoMessage "siteName: tmg Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
-            Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"            
+            Show-InfoMessage "siteName: rts for Commercial Ready To Ship Website"            
             Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
 
             Show-InfoMessage "buildConfig: debug or release"
