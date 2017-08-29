@@ -1,17 +1,13 @@
-﻿Function Invoke-DBRestore {
-    
-    # TODO: Get the sitecore backups into one step.
-
+﻿Function Invoke-DBRestore {    
     [cmdletbinding()]
-        Param(
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$database,  
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$env
-            )
-            
+    Param(
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$database,  
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$env
+    )
     Begin {
         
         <#
@@ -356,7 +352,7 @@
                 return
             }
         
-            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."            
+            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."
             
             # Second, initialize SQL SMO
             $smoExtendedAssemblyInfo = ""			
