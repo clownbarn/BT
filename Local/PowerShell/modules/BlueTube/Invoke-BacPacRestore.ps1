@@ -1,4 +1,4 @@
-﻿Function Invoke-DBRestore {
+﻿Function Invoke-BacPacRestore {
     
     
     [cmdletbinding()]
@@ -18,7 +18,7 @@
         #>
         Function Show-Usage {
         
-            Show-InfoMessage "Usage: Invoke-DBRestore -database [db]"        
+            Show-InfoMessage "Usage: Invoke-BacPacRestore -database [db]"        
             Show-InfoMessage "[database]: services for Mohawk_Services_Dev Database"
             Show-InfoMessage "[database]: commercial for Mohawk_TMGCommercial Database"
             Show-InfoMessage "[database]: residential for MFProduct Database"
@@ -338,7 +338,7 @@
         
         if([string]::IsNullOrEmpty($backupFileName)) {
 
-            Show-ErrorMessage "Restore failed. No backup file found!"
+            Show-ErrorMessage "Restore failed. No bacpac file found!"
         }
         else {
         
@@ -346,6 +346,7 @@
 
             Show-WarningMessage "Preparing to restore from file: $($backupFilePath). The $($databaseToRestore) database will be overwritten. To continue press Y. To quit, press any other key."
 
+            <#
             $keyInfo = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         
             # 89 is the Y key
@@ -354,25 +355,40 @@
                 Show-InfoMessage "The restore operation was cancelled."
                 return
             }
-        
+            #>
+
             Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."            
             
+            <#
             # Second, initialize SQL SMO
             $smoExtendedAssemblyInfo = ""			
-            
-            if(Test-Path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll") {
+            #>
+
+            if(Test-Path "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll") {
       
-                #Show-InfoMessage "Adding Type: C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
-                Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
-                $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+                Show-InfoMessage "Adding Type: C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll"
+                Add-Type -path "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll"
+                # $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
             }
             else {
             
-                #Show-InfoMessage "Adding Type: C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
-                Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
-                $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+                Show-InfoMessage "Adding Type: C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll"
+                Add-Type -path "C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll"
+                # $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
             }
 
+            $restoredDatabaseName = 'NewDatabase'
+            #$bacpacFile = "Your BACPAC file you downloaded"
+            $conn = "Data Source=localhost;Initial Catalog=master;Connection Timeout=0;Integrated Security=True;"
+
+            $importBac = New-Object Microsoft.SqlServer.Dac.DacServices $conn
+            $loadBac = [Microsoft.SqlServer.Dac.BacPackage]::Load($backupFilePath)
+            $importBac.ImportBacpac($loadBac, $restoredDatabaseName)
+
+            #Clean up
+            $loadBac.Dispose()
+            
+            <#
             $sqlServer = New-Object "Microsoft.SqlServer.Management.SMO.Server"
             
             # Third, restart SQL Server to drop any open connections.
@@ -401,6 +417,8 @@
             $relocateLog = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalLogFileName, "$($sqlServer.MasterDBLogPath)\$($databaseToRestore).ldf")            
 
             Restore-SqlDatabase -ServerInstance $sqlServerName -Database $databaseToRestore -BackupFile $backupFilePath -RelocateFile @($relocateData,$relocateLog)
+
+            #>
 
             Show-InfoMessage ($databaseToRestore + " Database Restore Complete.")            
         }
