@@ -63,9 +63,12 @@ Function Add-User {
             $user.SetInfo()
             $user.UserFlags = $ADS_UF_DONT_EXPIRE_PASSWD
             $user.SetInfo()
-
-            $group = $computer.psbase.children.find($groupName)
+			
+			$group = $computer.psbase.children.find($groupName)
             $group.psbase.Invoke("Add",$user.psbase.path.tostring())
+			
+			$group = $computer.psbase.children.find("Remote Desktop Users")
+            $group.psbase.Invoke("Add",$user.psbase.path.tostring())	
         }
         catch {          
                 
