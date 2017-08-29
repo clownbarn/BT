@@ -1,16 +1,10 @@
 ﻿Function Invoke-BacPacRestore {
-    
-    
     [cmdletbinding()]
-        Param(
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$database,  
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$env
-            )
-            
+    Param(
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$database
+    )            
     Begin {
         
         <#
@@ -37,19 +31,7 @@
     Process {
         
         $_LOCAL = "LOCAL"
-        $_DEV = "DEV"
-        $_QA = "QA"
-        $_UAT = "UAT"
-        $_PROD = "PROD"
-
-        # Validate $env parameter
-        if(!(($env -eq $_LOCAL) -or ($env -eq $_DEV) -or ($env -eq $_QA) -or ($env -eq $_UAT) -or ($env -eq $_PROD))) {
-
-            Show-InfoMessage "Invalid environment specified."
-            Show-Usage
-            return
-        }
-
+        
         $workingDir = (Get-Item -Path ".\" -Verbose).FullName
         $databaseToRestore = "";
         $dbBackupStorageRoot = if(![string]::IsNullOrEmpty($env:DBBACKUPSTORAGEROOT)) { $env:DBBACKUPSTORAGEROOT } else { "C:\stuff\DBBackups\" }
@@ -73,257 +55,76 @@
         {
             $_SERVICES_DB
                 {
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Services_Dev"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Services_Dev"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Services_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Services_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Services"
-                    }                                        
-                    
+                    $databaseToRestore = "Mohawk_Services_Dev"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Services"
-                    break                    
+                    break
                 }
             $_COMMERCIAL_DB
-                {   
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_TMGCommercial"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "TMGCommercial_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "TMGCommercial_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "TMGCommercial_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "TMGCommercial"
-                    }
-                                        
+                {
+                    $databaseToRestore = "Mohawk_TMGCommercial"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
-                    break                    
+                    break
                 }
             $_RESIDENTIAL_DB
-                {                     
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_MFProduct"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "MFProduct_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "MFProduct_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "MFProductStaging"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "MFProduct"
-                    }
-
+                {
+                    $databaseToRestore = "Mohawk_MFProduct"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
-                    break                    
+                    break
                 }
             $_INVENTORY_DB
-                {                     
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_InventoryData"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_InventoryData_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_InventoryData_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_InventoryData_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_InventoryData"
-                    }
-
+                {
+                    $databaseToRestore = "Mohawk_InventoryData"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_InventoryData"
-                    break                    
+                    break
                 }
             $_MONGO_DB
-                {                     
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Mongo_Data"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Mongo_Data_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Mongo_Data_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Mongo_Data_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Mongo_Data"
-                    }
-
+                {
+                    $databaseToRestore = "Mohawk_Mongo_Data"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Mongo_Data"
-                    break                    
+                    break
                 }
             $_KARASTAN_DB
-                {                     
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Karastan"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Karastan_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Karastan_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "MFKarastanStaging"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "MFKarastan"
-                    }
-
+                {
+                    $databaseToRestore = "Mohawk_Karastan"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
-                    break                    
+                    break
                 }
             $_DEALER_DB
-                {                     
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_MFDealer"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "MFDealer_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "MFDealer_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "MFDealerStaging"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "MFDealer"
-                    }
-
+                {
+                    $databaseToRestore = "Mohawk_MFDealer"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
-                    break                    
+                    break
                 }
             $_DURKAN_DB
-                {                     
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Durkan"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Durkan_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Durkan_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Durkan_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Durkan"
-                    }
-
+                {
+                    $databaseToRestore = "Mohawk_Durkan"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Durkan"
-                    break                    
+                    break
                 }
             $_SITECORE_ANALYTICS_DB
                 {
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Sitecore_Analytics"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Sitecore_Analytics_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Sitecore_Analytics_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Sitecore_Analytics_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Durkan"
-                    }
-
+                    $databaseToRestore = "Mohawk_Sitecore_Analytics"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Analytics"
                     break
                 }
             $_SITECORE_CORE_DB
                 {
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Sitecore_Core"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Sitecore_Core_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Sitecore_Core_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Sitecore_Core_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Sitecore_Core"
-                    }
-
+                    $databaseToRestore = "Mohawk_Sitecore_Core"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Core"
                     break
                 }
             $_SITECORE_MASTER_DB
                 {
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Sitecore_Master"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Sitecore_Master_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Sitecore_Master_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Sitecore_Master_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Sitecore_Master"
-                    }
-
+                    $databaseToRestore = "Mohawk_Sitecore_Master"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Master"
                     break
                 }
             $_SITECORE_WEB_DB
                 {
-                    if($env -eq $_LOCAL) {
-                        $databaseToRestore = "Mohawk_Sitecore_Web"
-                    }
-                    elseif($env -eq $_DEV) {
-                        $databaseToRestore = "Mohawk_Sitecore_Web_DEV"
-                    }
-                    elseif($env -eq $_QA) {
-                        $databaseToRestore = "Mohawk_Sitecore_Web_QA"
-                    }
-                    elseif($env -eq $_UAT) {
-                        $databaseToRestore = "Mohawk_Sitecore_Web_STG"
-                    }
-                    elseif($env -eq $_PROD) {
-                        $databaseToRestore = "Mohawk_Sitecore_Web"
-                    }
-
+                    $databaseToRestore = "Mohawk_Sitecore_Web"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Web"
                     break
                 }
-            
 
             default {
                 Show-InfoMessage "Invalid Database"
@@ -334,7 +135,7 @@
 
         # First get the backup file name. This will be from the last backup done.
         $backupFiles = Get-ChildItem -path $dbBackupStorageDir -File
-        $backupFileName = $backupFiles | sort LastWriteTime | select -last 1
+        $backupFileName = $backupFiles | Sort-Object LastWriteTime | Select-Object -last 1
         
         if([string]::IsNullOrEmpty($backupFileName)) {
 
@@ -346,7 +147,6 @@
 
             Show-WarningMessage "Preparing to restore from file: $($backupFilePath). The $($databaseToRestore) database will be overwritten. To continue press Y. To quit, press any other key."
 
-            <#
             $keyInfo = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         
             # 89 is the Y key
@@ -355,40 +155,19 @@
                 Show-InfoMessage "The restore operation was cancelled."
                 return
             }
-            #>
-
-            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."            
             
-            <#
-            # Second, initialize SQL SMO
-            $smoExtendedAssemblyInfo = ""			
-            #>
-
-            if(Test-Path "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll") {
+            # Second, initialize SQL SMO            
+            if(Test-Path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll") {
       
-                Show-InfoMessage "Adding Type: C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll"
-                Add-Type -path "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll"
-                # $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+                #Show-InfoMessage "Adding Type: C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+                Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
             }
             else {
             
-                Show-InfoMessage "Adding Type: C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll"
-                Add-Type -path "C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll"
-                # $smoExtendedAssemblyInfo = "Microsoft.SqlServer.SmoExtended, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"
+                #Show-InfoMessage "Adding Type: C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
+                Add-Type -path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\12.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
             }
 
-            $restoredDatabaseName = 'NewDatabase'
-            #$bacpacFile = "Your BACPAC file you downloaded"
-            $conn = "Data Source=localhost;Initial Catalog=master;Connection Timeout=0;Integrated Security=True;"
-
-            $importBac = New-Object Microsoft.SqlServer.Dac.DacServices $conn
-            $loadBac = [Microsoft.SqlServer.Dac.BacPackage]::Load($backupFilePath)
-            $importBac.ImportBacpac($loadBac, $restoredDatabaseName)
-
-            #Clean up
-            $loadBac.Dispose()
-            
-            <#
             $sqlServer = New-Object "Microsoft.SqlServer.Management.SMO.Server"
             
             # Third, restart SQL Server to drop any open connections.
@@ -403,26 +182,31 @@
                 $sqlServer.databases[$databaseToRestore].Drop()
             }
 
-            # Fourth, Restore the database.
-            $sqlServerName = $sqlServer.Name            
+            # Fourth, initialize SQL DAC Services.
+            if(Test-Path "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll") {
+                
+                #Show-InfoMessage "Adding Type: C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll"
+                Add-Type -path "C:\Program Files (x86)\Microsoft SQL Server\140\DAC\bin\Microsoft.SqlServer.Dac.dll"
+            }
+            else {
+            
+                #Show-InfoMessage "Adding Type: C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll"
+                Add-Type -path "C:\Program Files (x86)\Microsoft SQL Server\120\DAC\bin\Microsoft.SqlServer.Dac.dll"
+            }
+            
+            $conn = "Data Source=localhost;Initial Catalog=master;Connection Timeout=0;Integrated Security=True;"
+            $dacServices = New-Object Microsoft.SqlServer.Dac.DacServices $conn
+            $package = [Microsoft.SqlServer.Dac.BacPackage]::Load($backupFilePath)
+            
+            # Fifth, Restore the database.
+            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."
 
-            $restore = New-Object "Microsoft.SqlServer.Management.Smo.Restore, $($smoExtendedAssemblyInfo)"
-            $backupDevice = New-Object "Microsoft.SqlServer.Management.Smo.BackupDeviceItem, $($smoExtendedAssemblyInfo)" ($backupFilePath, "File")
-            $restore.Devices.Add($backupDevice)
-            $fileList = $restore.ReadFileList($sqlServer)
-            $logicalDataFileName = $fileList.Select("Type = 'D'")[0].LogicalName
-            $logicalLogFileName = $fileList.Select("Type = 'L'")[0].LogicalName
+            $dacServices.ImportBacpac($package, $databaseToRestore)
+            $package.Dispose()
 
-            $relocateData = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalDataFileName, "$($sqlServer.MasterDBPath)\$($databaseToRestore).mdf")
-            $relocateLog = New-Object "Microsoft.SqlServer.Management.Smo.RelocateFile, $($smoExtendedAssemblyInfo)" ($logicalLogFileName, "$($sqlServer.MasterDBLogPath)\$($databaseToRestore).ldf")            
-
-            Restore-SqlDatabase -ServerInstance $sqlServerName -Database $databaseToRestore -BackupFile $backupFilePath -RelocateFile @($relocateData,$relocateLog)
-
-            #>
-
-            Show-InfoMessage ($databaseToRestore + " Database Restore Complete.")            
+            Show-InfoMessage ($databaseToRestore + " Database Restore Complete.")
         }
 
-        cd $workingDir        
+        Set-Location $workingDir
     }
 }

@@ -1,16 +1,13 @@
-﻿Function Invoke-DBRestore {
-    
-    
+﻿Function Invoke-DBRestore {    
     [cmdletbinding()]
-        Param(
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$database,  
-            [parameter(Mandatory=$true, ValueFromPipeline)]
-            [ValidateNotNullOrEmpty()] #No value
-            [string]$env
-            )
-            
+    Param(
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$database,  
+        [parameter(Mandatory=$true, ValueFromPipeline)]
+        [ValidateNotNullOrEmpty()] #No value
+        [string]$env
+    )
     Begin {
         
         <#
@@ -355,7 +352,7 @@
                 return
             }
         
-            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."            
+            Show-InfoMessage "Restoring $($databaseToRestore) Database from file: $($backupFileName)..."
             
             # Second, initialize SQL SMO
             $smoExtendedAssemblyInfo = ""			
