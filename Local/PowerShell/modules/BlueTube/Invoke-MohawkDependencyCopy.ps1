@@ -22,6 +22,7 @@
             Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
+            Show-InfoMessage "siteName: bmf for BMF/Portico Website"
             
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -40,7 +41,7 @@
 
             "flooring" {                     
                     
-                Show-InfoMessage "Getting Dependencies for Mohawk Flooring Website (Redesign)..."
+                Show-InfoMessage "Getting Dependencies for Mohawk Flooring Website"
 
                 $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
                 $solutionDir = $projectDirRoot
@@ -107,6 +108,18 @@
                 $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
+                break                    
+            }
+
+            "bmf" {                     
+                    
+                Show-InfoMessage "Getting Dependencies for BMF/Portico Website"
+
+                $projectDirRoot = $workingDirRoot + "mohawk-bmf"
+                $solutionDir = $projectDirRoot + "\dotnet"
+                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
+                $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"
+                                
                 break                    
             }
                         

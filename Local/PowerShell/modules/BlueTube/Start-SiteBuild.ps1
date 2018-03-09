@@ -25,6 +25,7 @@
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commercial Ready To Ship Website"            
             Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
+            Show-InfoMessage "siteName: bmf for BMF/Portico Website"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -170,6 +171,21 @@
                     $solutionDir = $projectDirRoot
                     $solutionName = "Mohawk.Flooring.Sitecore.sln"
                     $gulpDir = $projectDirRoot + "\PresentationLayer"                              
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break                    
+                }
+
+                "bmf" {                     
+                    
+                    Show-InfoMessage "Starting BMF/Portico Website (Conversion) solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-bmf"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.BMF.sln"
+                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.BMF.Website\PresLayerBmf"                              
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
