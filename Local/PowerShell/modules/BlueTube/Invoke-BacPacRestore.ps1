@@ -12,25 +12,23 @@
         #>
         Function Show-Usage {
         
-            Show-InfoMessage "Usage: Invoke-BacPacRestore -database [db]"        
+            Show-InfoMessage "Usage: Invoke-BacPacRestore -database [db]"
             Show-InfoMessage "[database]: services for Mohawk_Services_Dev Database"
             Show-InfoMessage "[database]: commercial for Mohawk_TMGCommercial Database"
             Show-InfoMessage "[database]: residential for MFProduct Database"
             Show-InfoMessage "[database]: inventory for Mohawk_InventoryData Database"
             Show-InfoMessage "[database]: mongo for Mohawk_Mongo_Data Database"
             Show-InfoMessage "[database]: karastan for Mohawk_Karastan Database"
+            Show-InfoMessage "[database]: home for MohawkHome Database"
             Show-InfoMessage "[database]: dealer for Mohawk_MFDealer Database"
             Show-InfoMessage "[database]: durkan for Mohawk_Durkan Database"
             Show-InfoMessage "[database]: sitecorea for Mohawk_Sitecore_Analytics"
             Show-InfoMessage "[database]: sitecorec for Mohawk_Sitecore_Core"
             Show-InfoMessage "[database]: sitecorem for Mohawk_Sitecore_Master"
             Show-InfoMessage "[database]: sitecorew for Mohawk_Sitecore_Web"
-            Show-InfoMessage "Valid values for [env]: LOCAL, DEV, QA, UAT, and PROD"
         }
     }
     Process {
-        
-        $_LOCAL = "LOCAL"
         
         $workingDir = (Get-Item -Path ".\" -Verbose).FullName
         $databaseToRestore = "";
@@ -44,6 +42,7 @@
         $_INVENTORY_DB = "inventory"
         $_MONGO_DB = "mongo"
         $_KARASTAN_DB = "karastan"
+        $_HOME_DB = "home"
         $_DEALER_DB = "dealer"
         $_DURKAN_DB = "durkan"
         $_SITECORE_ANALYTICS_DB = "sitecorea"
@@ -87,6 +86,12 @@
                 {
                     $databaseToRestore = "Mohawk_Karastan"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
+                    break
+                }
+            $_HOME_DB
+                {
+                    $databaseToRestore = "MohawkHome"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkHome"
                     break
                 }
             $_DEALER_DB
