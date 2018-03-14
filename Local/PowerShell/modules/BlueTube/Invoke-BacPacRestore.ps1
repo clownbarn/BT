@@ -26,6 +26,10 @@
             Show-InfoMessage "[database]: sitecorec for Mohawk_Sitecore_Core"
             Show-InfoMessage "[database]: sitecorem for Mohawk_Sitecore_Master"
             Show-InfoMessage "[database]: sitecorew for Mohawk_Sitecore_Web"
+            Show-InfoMessage "[database]: bmfsca for MohawkBmf_reporting"
+            Show-InfoMessage "[database]: bmfscc for MohawkBmf_core"
+            Show-InfoMessage "[database]: bmfscm for MohawkBmf_master"
+            Show-InfoMessage "[database]: bmfscw for MohawkBmf_web"
         }
     }
     Process {
@@ -49,6 +53,10 @@
         $_SITECORE_CORE_DB = "sitecorec"
         $_SITECORE_MASTER_DB = "sitecorem"
         $_SITECORE_WEB_DB = "sitecorew"
+        $_BMF_SITECORE_ANALYTICS_DB = "bmfsca"
+        $_BMF_SITECORE_CORE_DB = "bmfscc"
+        $_BMF_SITECORE_MASTER_DB = "bmfscm"
+        $_BMF_SITECORE_WEB_DB = "bmfscw"
 
         switch($database)
         {
@@ -130,6 +138,30 @@
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Sitecore_Web"
                     break
                 }
+            $_BMF_SITECORE_ANALYTICS_DB
+                {
+                    $databaseToRestore = "MohawkBmf_reporting"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_reporting"
+                    break
+                }
+            $_BMF_SITECORE_CORE_DB
+                {
+                    $databaseToRestore = "MohawkBmf_core"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_core"
+                    break
+                }
+            $_BMF_SITECORE_MASTER_DB
+                {
+                    $databaseToRestore = "MohawkBmf_master"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_master"
+                    break
+                }
+            $_BMF_SITECORE_WEB_DB
+                {
+                    $databaseToRestore = "MohawkBmf_web"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_web"
+                    break
+                }                
 
             default {
                 Show-InfoMessage "Invalid Database"
