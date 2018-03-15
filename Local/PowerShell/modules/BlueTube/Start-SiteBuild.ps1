@@ -180,7 +180,7 @@
 
                 "bmf" {                     
                     
-                    Show-InfoMessage "Starting BMF/Portico Website (Conversion) solution build..."
+                    Show-InfoMessage "Starting BMF/Portico Website solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-bmf"
                     $solutionDir = $projectDirRoot
