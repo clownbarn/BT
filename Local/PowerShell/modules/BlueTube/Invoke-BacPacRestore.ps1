@@ -30,6 +30,10 @@
             Show-InfoMessage "[database]: bmfscc for MohawkBmf_core"
             Show-InfoMessage "[database]: bmfscm for MohawkBmf_master"
             Show-InfoMessage "[database]: bmfscw for MohawkBmf_web"
+            Show-InfoMessage "[database]: aladdinsca for AladdinCommercial_Sitecore_reporting"
+            Show-InfoMessage "[database]: aladdinscc for AladdinCommercial_Sitecore_core"
+            Show-InfoMessage "[database]: aladdinscm for AladdinCommercial_Sitecore_master"
+            Show-InfoMessage "[database]: aladdinscw for AladdinCommercial_Sitecore_web"
         }
     }
     Process {
@@ -57,6 +61,10 @@
         $_BMF_SITECORE_CORE_DB = "bmfscc"
         $_BMF_SITECORE_MASTER_DB = "bmfscm"
         $_BMF_SITECORE_WEB_DB = "bmfscw"
+        $_ALADDIN_SITECORE_ANALYTICS_DB = "aladdinsca"
+        $_ALADDIN_SITECORE_CORE_DB = "aladdinscc"
+        $_ALADDIN_SITECORE_MASTER_DB = "aladdinscm"
+        $_ALADDIN_SITECORE_WEB_DB = "aladdinscw"
 
         switch($database)
         {
@@ -162,6 +170,30 @@
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_web"
                     break
                 }                
+            $_ALADDIN_SITECORE_ANALYTICS_DB
+                {
+                    $databaseToRestore = "AladdinCommercial_Sitecore_reporting"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)AladdinCommercial_Sitecore_reporting"
+                    break
+                }
+            $_ALADDIN_SITECORE_CORE_DB
+                {
+                    $databaseToRestore = "AladdinCommercial_Sitecore_core"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)AladdinCommercial_Sitecore_core"
+                    break
+                }
+            $_ALADDIN_SITECORE_MASTER_DB
+                {
+                    $databaseToRestore = "AladdinCommercial_Sitecore_master"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)AladdinCommercial_Sitecore_master"
+                    break
+                }
+            $_ALADDIN_SITECORE_WEB_DB
+                {
+                    $databaseToRestore = "AladdinCommercial_Sitecore_web"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)AladdinCommercial_Sitecore_web"
+                    break
+                }
 
             default {
                 Show-InfoMessage "Invalid Database"
