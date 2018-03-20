@@ -23,6 +23,7 @@
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
             Show-InfoMessage "siteName: rts for Commerical Ready To Ship Website"
             Show-InfoMessage "siteName: bmf for BMF/Portico Website"
+            Show-InfoMessage "siteName: aladdin for BMF/Portico Website"
             
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -116,6 +117,18 @@
                 Show-InfoMessage "Getting Dependencies for BMF/Portico Website"
 
                 $projectDirRoot = $workingDirRoot + "mohawk-bmf"
+                $solutionDir = $projectDirRoot + "\dotnet"
+                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
+                $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"
+                                
+                break                    
+            }
+
+            "aladdin" {                     
+                    
+                Show-InfoMessage "Getting Dependencies for Aladdin Commercial Website"
+
+                $projectDirRoot = $workingDirRoot + "mohawk-aladdin-commercial"
                 $solutionDir = $projectDirRoot + "\dotnet"
                 $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"

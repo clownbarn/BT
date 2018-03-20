@@ -26,6 +26,7 @@
             Show-InfoMessage "siteName: rts for Commercial Ready To Ship Website"            
             Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
             Show-InfoMessage "siteName: bmf for BMF/Portico Website"
+            Show-InfoMessage "siteName: aladdin for Aladdin Commercial Website"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -186,6 +187,21 @@
                     $solutionDir = $projectDirRoot
                     $solutionName = "Mohawk.BMF.sln"
                     $gulpDir = $projectDirRoot + "\inetpub\Mohawk.BMF.Website\PresLayerBmf"                              
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break                    
+                }
+
+                "aladdin" {                     
+                    
+                    Show-InfoMessage "Starting Aladdin Commercial Website solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-aladdin-commercial"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.AladdinCommercial.sln"
+                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.AladdinCommercial.Website\PresLayerAc"                              
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
