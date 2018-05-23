@@ -245,7 +245,7 @@
             }
 
             # Fourth, restore Nuget packages, if necessary.
-            $nugetPackageConfigs = Get-ChildItem $projectDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
+            $nugetPackageConfigs = Get-ChildItem $sitecoreWorkingDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
 
             if($nugetPackageConfigs.length -ne 0) {
                 

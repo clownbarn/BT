@@ -148,26 +148,26 @@
                 }
             $_BMF_SITECORE_ANALYTICS_DB
                 {
-                    $databaseToRestore = "MohawkBmf_reporting"
-                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_reporting"
+                    $databaseToRestore = "BMF_Sitecore_Reporting"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)BMF_Sitecore_Reporting"
                     break
                 }
             $_BMF_SITECORE_CORE_DB
                 {
-                    $databaseToRestore = "MohawkBmf_core"
-                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_core"
+                    $databaseToRestore = "BMF_Sitecore_Core"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)BMF_Sitecore_Core"
                     break
                 }
             $_BMF_SITECORE_MASTER_DB
                 {
-                    $databaseToRestore = "MohawkBmf_master"
-                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_master"
+                    $databaseToRestore = "BMF_Sitecore_Master"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)BMF_Sitecore_Master"
                     break
                 }
             $_BMF_SITECORE_WEB_DB
                 {
-                    $databaseToRestore = "MohawkBmf_web"
-                    $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkBmf_web"
+                    $databaseToRestore = "BMF_Sitecore_Web"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)BMF_Sitecore_Web"
                     break
                 }                
             $_ALADDIN_SITECORE_ANALYTICS_DB
