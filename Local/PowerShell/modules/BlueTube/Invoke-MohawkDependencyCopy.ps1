@@ -33,6 +33,7 @@
         #$currentDir = (Get-Item -Path ".\" -Verbose).FullName
         $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
         $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:MOHAWKSITECOREPROJPATH)) { $env:MOHAWKSITECOREPROJPATH } else { "C:\mss\" }
+        $soaDir = "mohawk-soa\"
         $projectDirRoot = ""
         $solutionDir = ""
         $dependencySourceDirs = @()
@@ -46,7 +47,7 @@
 
                 $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
                 $solutionDir = $projectDirRoot
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk-SOA"
                                 
                 break                    
@@ -58,7 +59,7 @@
 
                 $projectDirRoot = $workingDirRoot + "mohawk"
                 $solutionDir = $projectDirRoot + "\MohawkFlooring"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
 
                 break                    
@@ -70,7 +71,7 @@
 
                 $projectDirRoot = $workingDirRoot + "mohawk-group"
                 $solutionDir = $projectDirRoot + "\projects\TMG\trunk"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net35\bin\" + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net35\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
                 break                    
@@ -82,7 +83,7 @@
 
                 $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
                 $solutionDir = $projectDirRoot
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk SOA"
                                 
                 break                    
@@ -94,7 +95,7 @@
 
                 $projectDirRoot = $workingDirRoot + "mohawk-residential-ready-to-ship"
                 $solutionDir = $projectDirRoot + "\dotnet"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
                 break                    
@@ -106,7 +107,7 @@
 
                 $projectDirRoot = $workingDirRoot + "mohawk-ready-to-ship"
                 $solutionDir = $projectDirRoot + "\dotnet"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
                 break                    
@@ -118,7 +119,7 @@
 
                 $projectDirRoot = $workingDirRoot + "mohawk-bmf"
                 $solutionDir = $projectDirRoot + "\dotnet"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"
                                 
                 break                    
@@ -130,7 +131,7 @@
 
                 $projectDirRoot = $workingDirRoot + "mohawk-aladdin-commercial"
                 $solutionDir = $projectDirRoot + "\dotnet"
-                $dependencySourceDirs = @($workingDirRoot + "mohawk-group-soa\dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"
                                 
                 break                    

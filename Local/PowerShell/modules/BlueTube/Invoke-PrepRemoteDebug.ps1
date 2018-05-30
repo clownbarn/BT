@@ -32,7 +32,7 @@
                     
                     #Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
 
-                    $projectPath = $projectDirRoot + "mohawk-group-soa\inetpub\Mohawk.Services\"
+                    $projectPath = $projectDirRoot + "mohawk-soa\inetpub\Mohawk.Services\"
                     $projectOutputAssembly = "Mohawk.Services.dll"
                     $projecOutputSymbolFile = "Mohawk.Services.pdb"
                     $mohawkSymbolPath = "E:\BuildAgent\work\41940996df7cf9db\inetpub\Mohawk.Services\"

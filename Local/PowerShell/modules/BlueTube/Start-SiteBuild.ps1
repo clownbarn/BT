@@ -69,7 +69,7 @@
                     
                     Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
 
-                    $projectDirRoot = $workingDirRoot + "mohawk-group-soa"
+                    $projectDirRoot = $workingDirRoot + "mohawk-soa"
                     $solutionDir = $projectDirRoot + "\dotnet"
                     $solutionName = "Mohawk.Services.sln"
                     $packageDir = $solutionDir + "\packages"
