@@ -97,7 +97,7 @@
                     
                     Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
                     
-                    $projectDirRoot = $sitecoreWorkingDirRoot #+ "dotNet\Mohawk.SitecoreShell.Framework"
+                    $projectDirRoot = $sitecoreWorkingDirRoot
                     $solutionDir = $sitecoreWorkingDirRoot
                     $solutionName = "Mohawk.SitecoreShell.Website.sln"
                     $packageDir = $solutionDir + "\packages"
@@ -245,7 +245,7 @@
             }
 
             # Fourth, restore Nuget packages, if necessary.
-            $nugetPackageConfigs = Get-ChildItem $sitecoreWorkingDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
+            $nugetPackageConfigs = Get-ChildItem $solutionDir -Filter packages.config -r | Foreach-Object {$_.FullName}
 
             if($nugetPackageConfigs.length -ne 0) {
                 
