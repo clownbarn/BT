@@ -36,8 +36,8 @@
         try {
 
             $currentDir = (Get-Item -Path ".\" -Verbose).FullName
-            $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
-            $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:MOHAWKSITECOREPROJPATH)) { $env:MOHAWKSITECOREPROJPATH } else { "C:\mss\" }
+            $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\src\" }
+            $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\src\" }
             $projectDirRoot = ""
             $solutionDir = ""
             $solutionName = ""
@@ -50,36 +50,52 @@
 
             switch($siteName) {
                 
-                "flooringlegacy" {                     
+                "flooring" {
+                    
+                    Show-InfoMessage "Starting Mohawk Flooring Website (Conversion) solution build..."
+
+                    $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.Flooring.Sitecore.sln"
+                    $gulpDir = $projectDirRoot + "\PresentationLayer"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
+                "flooringlegacy" {
                     
                     Show-InfoMessage "Starting Mohawk Flooring (Legacy) solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk"
                     $solutionDir = $projectDirRoot + "\MohawkFlooring"
                     $solutionName = "MohawkFlooring.sln"
-                    $gruntDir = $projectDirRoot + "\PresentationLayer"                              
+                    $gruntDir = $projectDirRoot + "\PresentationLayer"
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
 
-                    break                    
+                    break
                 }
 
-                "soa" {                     
+                "tmg" {
                     
-                    Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
+                    Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
 
-                    $projectDirRoot = $workingDirRoot + "mohawk-soa"
-                    $solutionDir = $projectDirRoot + "\dotnet"
-                    $solutionName = "Mohawk.Services.sln"
+                    $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.Commercial.Website.sln"
+                    $gulpDir = $projectDirRoot + "\PresentationLayer"
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
 
-                    break                    
+                    break
                 }
 
-                "tmglegacy" {                     
+                "tmglegacy" {
                     
                     Show-InfoMessage "Starting Mohawk Commercial Website (Legacy) solution build..."
 
@@ -90,39 +106,10 @@
 
                     $doPreDeployStep = $FALSE
 
-                    break                    
-                }
-
-                "sitecoreshell" {
-                    
-                    Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
-                    
-                    $projectDirRoot = $sitecoreWorkingDirRoot
-                    $solutionDir = $sitecoreWorkingDirRoot
-                    $solutionName = "Mohawk.SitecoreShell.Website.sln"
-                    $packageDir = $solutionDir + "\packages"
-
-                    $doPreDeployStep = $FALSE
-
                     break
                 }
 
-                "tmg" {                     
-                    
-                    Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
-
-                    $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
-                    $solutionDir = $projectDirRoot
-                    $solutionName = "Mohawk.Commercial.Website.sln"
-                    $gulpDir = $projectDirRoot + "\PresentationLayer"                              
-                    $packageDir = $solutionDir + "\packages"
-
-                    $doPreDeployStep = $FALSE
-
-                    break                    
-                }
-                
-                "rrts" {                     
+                "rrts" {
                     
                     Show-InfoMessage "Starting Mohawk Residential Ready To Ship solution build..."
 
@@ -133,10 +120,10 @@
 
                     $doPreDeployStep = $FALSE
 
-                    break                    
+                    break
                 }
 
-                "rts" {                     
+                "rts" {
                     
                     Show-InfoMessage "Starting Mohawk Commerical Ready To Ship solution build..."
 
@@ -147,7 +134,65 @@
 
                     $doPreDeployStep = $FALSE
 
-                    break                    
+                    break
+                }
+
+                "bmf" {
+                    
+                    Show-InfoMessage "Starting BMF/Portico Website solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-bmf"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.BMF.sln"
+                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.BMF.Website\PresLayerBmf"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
+                "aladdin" {
+                    
+                    Show-InfoMessage "Starting Aladdin Commercial Website solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-aladdin-commercial"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.AladdinCommercial.sln"
+                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.AladdinCommercial.Website\PresLayerAc"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
+                "soa" {
+                    
+                    Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-soa"
+                    $solutionDir = $projectDirRoot + "\dotnet"
+                    $solutionName = "Mohawk.Services.sln"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
+                "sitecoreshell" {
+                    
+                    Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
+                    
+                    $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.SitecoreShell.Website.sln"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
                 }
 
                 "viz" {
@@ -162,51 +207,6 @@
                     $doPreDeployStep = $FALSE
 
                     break
-                }
-
-                "flooring" {                     
-                    
-                    Show-InfoMessage "Starting Mohawk Flooring Website (Conversion) solution build..."
-
-                    $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
-                    $solutionDir = $projectDirRoot
-                    $solutionName = "Mohawk.Flooring.Sitecore.sln"
-                    $gulpDir = $projectDirRoot + "\PresentationLayer"                              
-                    $packageDir = $solutionDir + "\packages"
-
-                    $doPreDeployStep = $FALSE
-
-                    break                    
-                }
-
-                "bmf" {                     
-                    
-                    Show-InfoMessage "Starting BMF/Portico Website solution build..."
-
-                    $projectDirRoot = $workingDirRoot + "mohawk-bmf"
-                    $solutionDir = $projectDirRoot
-                    $solutionName = "Mohawk.BMF.sln"
-                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.BMF.Website\PresLayerBmf"                              
-                    $packageDir = $solutionDir + "\packages"
-
-                    $doPreDeployStep = $FALSE
-
-                    break                    
-                }
-
-                "aladdin" {                     
-                    
-                    Show-InfoMessage "Starting Aladdin Commercial Website solution build..."
-
-                    $projectDirRoot = $workingDirRoot + "mohawk-aladdin-commercial"
-                    $solutionDir = $projectDirRoot
-                    $solutionName = "Mohawk.AladdinCommercial.sln"
-                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.AladdinCommercial.Website\PresLayerAc"                              
-                    $packageDir = $solutionDir + "\packages"
-
-                    $doPreDeployStep = $FALSE
-
-                    break                    
                 }
                         
                 default {
@@ -245,7 +245,7 @@
             }
 
             # Fourth, restore Nuget packages, if necessary.
-            $nugetPackageConfigs = Get-ChildItem $solutionDir -Filter packages.config -r | Foreach-Object {$_.FullName}
+            $nugetPackageConfigs = Get-ChildItem $projectDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
 
             if($nugetPackageConfigs.length -ne 0) {
                 

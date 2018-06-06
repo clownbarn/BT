@@ -31,8 +31,8 @@
     Process {                    
             
         #$currentDir = (Get-Item -Path ".\" -Verbose).FullName
-        $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\BlueTube\Projects\" }
-        $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:MOHAWKSITECOREPROJPATH)) { $env:MOHAWKSITECOREPROJPATH } else { "C:\mss\" }
+        $workingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\src\" }
+        $sitecoreWorkingDirRoot = if(![string]::IsNullOrEmpty($env:BTPROJPATH)) { $env:BTPROJPATH } else { "C:\src\" }
         $soaDir = "mohawk-soa\"
         $projectDirRoot = ""
         $solutionDir = ""
@@ -41,19 +41,19 @@
 
         switch($siteName) {
 
-            "flooring" {                     
+            "flooring" {
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Flooring Website"
 
-                $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
+                $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
                 $solutionDir = $projectDirRoot
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk-SOA"
                                 
-                break                    
+                break
             }
 
-            "flooringlegacy" {                     
+            "flooringlegacy" {
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Flooring (Legacy)..."
 
@@ -62,10 +62,22 @@
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
 
-                break                    
-            }                
+                break
+            }
+            
+            "tmg" {
+                    
+                Show-InfoMessage "Getting Dependencies for Mohawk Commercial Website (Redesign)..."
 
-            "tmglegacy" {                     
+                $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
+                $solutionDir = $projectDirRoot
+                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
+                $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk SOA"
+                                
+                break
+            }            
+
+            "tmglegacy" {
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Commercial Website (Legacy)..."
 
@@ -74,22 +86,10 @@
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net35\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
-                break                    
+                break
             }
 
-            "tmg" {                     
-                    
-                Show-InfoMessage "Getting Dependencies for Mohawk Commercial Website (Redesign)..."
-
-                $projectDirRoot = $sitecoreWorkingDirRoot + "inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
-                $solutionDir = $projectDirRoot
-                $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.MohawkGroup\bin\" + $buildConfig)
-                $dependencyDestDir = $solutionDir + "\dotNet\dependencies\Mohawk SOA"
-                                
-                break                    
-            }            
-
-            "rrts" {                     
+            "rrts" {
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Residential Ready To Ship..."
 
@@ -98,10 +98,10 @@
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\" + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
-                break                    
+                break
             }
 
-            "rts" {                     
+            "rts" {
                     
                 Show-InfoMessage "Getting Dependencies for Mohawk Commerical Ready To Ship..."
 
@@ -110,10 +110,10 @@
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\Dependencies"
                 
-                break                    
+                break
             }
 
-            "bmf" {                     
+            "bmf" {
                     
                 Show-InfoMessage "Getting Dependencies for BMF/Portico Website"
 
@@ -122,10 +122,10 @@
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"
                                 
-                break                    
+                break
             }
 
-            "aladdin" {                     
+            "aladdin" {
                     
                 Show-InfoMessage "Getting Dependencies for Aladdin Commercial Website"
 
@@ -134,7 +134,7 @@
                 $dependencySourceDirs = @($workingDirRoot + $soaDir + "dotNet\Mohawk.Services.Client.Net45\bin\"  + $buildConfig)
                 $dependencyDestDir = $solutionDir + "\dependencies\Mohawk-SOA"
                                 
-                break                    
+                break
             }
                         
             default {
