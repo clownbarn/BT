@@ -26,10 +26,10 @@
             Show-InfoMessage "[database]: sitecorec for Mohawk_Sitecore_Core"
             Show-InfoMessage "[database]: sitecorem for Mohawk_Sitecore_Master"
             Show-InfoMessage "[database]: sitecorew for Mohawk_Sitecore_Web"
-            Show-InfoMessage "[database]: bmfsca for MohawkBmf_reporting"
-            Show-InfoMessage "[database]: bmfscc for MohawkBmf_core"
-            Show-InfoMessage "[database]: bmfscm for MohawkBmf_master"
-            Show-InfoMessage "[database]: bmfscw for MohawkBmf_web"
+            Show-InfoMessage "[database]: bmfsca for BMF_Sitecore_reporting"
+            Show-InfoMessage "[database]: bmfscc for BMF_Sitecore_core"
+            Show-InfoMessage "[database]: bmfscm for BMF_Sitecore_master"
+            Show-InfoMessage "[database]: bmfscw for BMF_Sitecore_web"
             Show-InfoMessage "[database]: aladdinsca for AladdinCommercial_Sitecore_reporting"
             Show-InfoMessage "[database]: aladdinscc for AladdinCommercial_Sitecore_core"
             Show-InfoMessage "[database]: aladdinscm for AladdinCommercial_Sitecore_master"
@@ -70,19 +70,19 @@
         {
             $_SERVICES_DB
                 {
-                    $databaseToRestore = "Mohawk_Services_Dev"
+                    $databaseToRestore = "Mohawk_Services"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Services"
                     break
                 }
             $_COMMERCIAL_DB
                 {
-                    $databaseToRestore = "Mohawk_TMGCommercial"
+                    $databaseToRestore = "TMGCommercial"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)TMGCommercial"
                     break
                 }
             $_RESIDENTIAL_DB
                 {
-                    $databaseToRestore = "Mohawk_MFProduct"
+                    $databaseToRestore = "MFProduct"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MFProduct"
                     break
                 }
@@ -100,19 +100,19 @@
                 }
             $_KARASTAN_DB
                 {
-                    $databaseToRestore = "Mohawk_Karastan"
+                    $databaseToRestore = "MFKarastan"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_Karastan"
                     break
                 }
             $_HOME_DB
                 {
-                    $databaseToRestore = "MohawkHome"
+                    $databaseToRestore = "MFHome"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkHome"
                     break
                 }
             $_DEALER_DB
                 {
-                    $databaseToRestore = "Mohawk_MFDealer"
+                    $databaseToRestore = "MFDealer"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Mohawk_MFDealer"
                     break
                 }

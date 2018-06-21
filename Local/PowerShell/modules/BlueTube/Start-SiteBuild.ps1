@@ -1,12 +1,12 @@
 ﻿Function Start-SiteBuild {
     [cmdletbinding()]
-    Param(        
+    Param(
         [parameter(Mandatory=$true, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()] #No value
         [string]$siteName,
         [parameter(Mandatory=$true, ValueFromPipeline)]
         [ValidateNotNullOrEmpty()] #No value
-        [string]$buildConfig        
+        [string]$buildConfig
     )
     Begin {
         
@@ -23,7 +23,7 @@
             Show-InfoMessage "siteName: tmg Mohawk Commercial Website (Redesign)"
             Show-InfoMessage "siteName: tmglegacy for Mohawk Commercial Website (Legacy)"
             Show-InfoMessage "siteName: rrts for Residential Ready To Ship Website"
-            Show-InfoMessage "siteName: rts for Commercial Ready To Ship Website"            
+            Show-InfoMessage "siteName: rts for Commercial Ready To Ship Website"
             Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
             Show-InfoMessage "siteName: bmf for BMF/Portico Website"
             Show-InfoMessage "siteName: aladdin for Aladdin Commercial Website"
@@ -86,7 +86,7 @@
 
                     $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
                     $solutionDir = $projectDirRoot
-                    $solutionName = "Mohawk.Commercial.Website.sln"
+                    $solutionName = "Mohawk.Commercial.Website.NoPresentationLayer.sln"
                     $gulpDir = $projectDirRoot + "\PresentationLayer"
                     $packageDir = $solutionDir + "\packages"
 
@@ -237,14 +237,8 @@
                 Invoke-SitePreDeploy -siteName $siteName
                 Show-InfoMessage "PreDeploy step complete."
             }            
-
-            # Third, copy dependencies, if necessary (Not necessary for SOA itself).
-            if($siteName -ne "soa" -and $siteName -ne "sitecoreshell" -and $siteName -ne "viz")
-            {
-                Invoke-MohawkDependencyCopy -siteName $siteName -buildConfig $buildConfig          
-            }
-
-            # Fourth, restore Nuget packages, if necessary.
+            
+            # Third, restore Nuget packages, if necessary.
             $nugetPackageConfigs = Get-ChildItem $projectDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
 
             if($nugetPackageConfigs.length -ne 0) {
@@ -266,7 +260,7 @@
                 Show-InfoMessage "Nuget package restore step complete."
             }            
 
-            # Fifth, build solution.
+            # Fourth, build solution.
             Show-InfoMessage "Building solution..."
             Invoke-Expression ("devenv " + $solutionName + " /build " + $buildConfig)
 
@@ -277,7 +271,7 @@
 
             Show-InfoMessage "Solution build complete."
             
-            # Sixth, do the grunt build, if necessary.
+            # Fifth, do the grunt build, if necessary.
             if(![string]::IsNullOrEmpty($gruntDir)) {
                 
                 Show-InfoMessage "Performing Grunt build step..."
@@ -300,7 +294,7 @@
                 Show-InfoMessage "Grunt build step complete."
             }
             
-            # Seventh, do the gulp build, if necessary.
+            # Sixth, do the gulp build, if necessary.
             if(![string]::IsNullOrEmpty($gulpDir)) {
                 
                 Show-InfoMessage "Performing Gulp build step..."
@@ -315,15 +309,15 @@
                 } 
 
                 Show-InfoMessage "Gulp build step complete."
-            }        
+            }
         }
         catch {
             
-            if($_.Exception.Message -ne $BUILD_FAILED) {    
+            if($_.Exception.Message -ne $BUILD_FAILED) {
                 Show-Exception $_.Exception
             }
 
-            throw            
+            throw
         }
         finally {
 
