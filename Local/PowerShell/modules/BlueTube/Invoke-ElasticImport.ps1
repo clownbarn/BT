@@ -1,3 +1,15 @@
+# Invoke-ElasticImport is a Powershell Cmdlet that imports the Elastic 
+# indexes from one instance to another.
+#
+# This script uses elasticdump
+#
+# elasticdump can be obtained with npm. More info here:
+#   https://www.npmjs.com/package/elasticdump
+#
+# Example Usage: Invoke-ElasticImport -source PROD -dest LOCAL
+#
+# Valid values for -source and -dest: DEV, QA, STAG, and PROD
+
 Function Invoke-ElasticImport {
     [cmdletbinding()]
     Param(        
@@ -23,11 +35,12 @@ Function Invoke-ElasticImport {
             try {
 
                 Show-InfoMessage "DELETING INDEX $($elasticUri)$($indexName)"
-
-                Invoke-WebRequest -Method DELETE -Uri "$($elasticUri)$($indexName)";
+                Invoke-WebRequest -Method DELETE -Uri "$($elasticUri)$($indexName)"
+                Show-InfoMessage "Status code is: $($httpStatusCode)"
             }
             catch {
-                Show-ErrorMessage "Error deleting $($indexName)";
+
+                Show-ErrorMessage "Error deleting index: $($indexName). The index may have already been deleted."
                 Show-Exception $_.Exception
             }
         }
@@ -94,7 +107,55 @@ Function Invoke-ElasticImport {
                 return $false
             }
 
-            return $true;
+            return $true
+        }
+
+        function CheckEndPoint($endpoint) {
+
+            $httpStatusCode = 404
+
+            try {
+                $request = [System.Net.WebRequest]::Create($endpoint)
+                $response = $request.GetResponse()
+                $httpStatusCode = $response.StatusCode.value__
+            }
+            catch {
+
+            }
+            finally {
+                if($response -ne $null) {
+                    $response.Close()
+                }
+            }
+
+            if($httpStatusCode -ne 200) {
+                Show-ErrorMessage "Destination Index: $($endpoint) cannot be reached. Check the VPN connection."
+                return $false
+            }
+            else {
+                Show-InfoMessage "Destination Index: $($endpoint) is available."
+            }
+
+            return $true
+        }
+
+        function CheckElasticAvailability($sourceIndex, $destIndex) {
+
+            $checkEndPointResult = $false
+
+            $checkEndPointResult = CheckEndPoint -endpoint $sourceIndex
+                
+            if(!$checkEndPointResult) {
+                return $false
+            }
+
+            $checkEndPointResult = CheckEndPoint -endpoint $destIndex
+            
+            if(!$checkEndPointResult) {
+                return $false
+            }
+
+            return $true
         }
     }
     Process {
@@ -124,7 +185,7 @@ Function Invoke-ElasticImport {
             
                 Show-InfoMessage "No import will be performed."
                 return
-            }        
+            }
         }
 
         #check that all the necessary environment variables have been set.
@@ -238,24 +299,29 @@ Function Invoke-ElasticImport {
         
         $destActiveIndex = Invoke-Sqlcmd "SELECT TOP 1 [ColorsIndexName],[StylesIndexName],[DealersIndexName],[DurkanCollectionIndexName] FROM ElasticIndex where IsActive = 1" -ServerInstance $destSQLServerInstance -Database "Mohawk_Services" -Username $destSQLUser -Password $destSQLPassword
 
-        $destStylesIndex = $destActiveIndex.StylesIndexName;
-        $destColorsIndex = $destActiveIndex.ColorsIndexName;
-        $destDealersIndex = $destActiveIndex.DealersIndexName;
-        $destCollectionsIndex = $destActiveIndex.DurkanCollectionIndexName;
+        $destStylesIndex = $destActiveIndex.StylesIndexName
+        $destColorsIndex = $destActiveIndex.ColorsIndexName
+        $destDealersIndex = $destActiveIndex.DealersIndexName
+        $destCollectionsIndex = $destActiveIndex.DurkanCollectionIndexName
 
         $destIndexes = @(
             $destStylesIndex,
             $destColorsIndex,
             $destDealersIndex,
             $destCollectionsIndex
-        );
+        )
         
-        #TODO: Test URIs for source and dest before proceeding. If not connected to the VPN, then the below will fail.
+        #Check that the Elastic Indexes can be reached.
+        $checkElasticResult = CheckElasticAvailability -sourceIndex $($sourceElasticInstance)$($sourceActiveIndex.StylesIndexName) -destIndex $($destElasticInstance)$($destActiveIndex.StylesIndexName)
 
+        if(!$checkElasticResult) {
+            return
+        }
+        
         Show-InfoMessage "Deleting destination indexes..."
-
+        
         foreach($index in $destIndexes) {
-            DeleteIndex -elasticUri $destElasticInstance -indexName $index;
+            DeleteIndex -elasticUri $destElasticInstance -indexName $index
         }
 
         Show-InfoMessage "Finished deleting destintation indexes."
@@ -263,29 +329,33 @@ Function Invoke-ElasticImport {
         $stopwatch =  [system.diagnostics.stopwatch]::StartNew()
 
         Show-InfoMessage "Starting import process..."
-
+    
         #Styles
         Show-InfoMessage "Importing Styles."
         Show-InfoMessage "Importing Index from $($sourceElasticInstance)$($sourceActiveIndex.StylesIndexName) to $($destElasticInstance)$($destActiveIndex.StylesIndexName)"
+        Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.StylesIndexName) --output $($destElasticInstance)$($destActiveIndex.StylesIndexName) --type mapping")
         Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.StylesIndexName) --output $($destElasticInstance)$($destActiveIndex.StylesIndexName)")
 
         #Colors
         Show-InfoMessage "Importing Colors."
         Show-InfoMessage "Importing Index from $($sourceElasticInstance)$($sourceActiveIndex.ColorsIndexName) to $($destElasticInstance)$($destActiveIndex.ColorsIndexName)"
-        Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.ColorsIndexName) --output $($destElasticInstance)$($destActiveIndex.ColorsIndexName)")
+        Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.ColorsIndexName) --output $($destElasticInstance)$($destActiveIndex.ColorsIndexName)--type mapping")
+        Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.ColorsIndexName) --output $($destElasticInstance)$($destActiveIndex.ColorsIndexName) ")
 
         #Dealers
         Show-InfoMessage "Importing Dealers."
         Show-InfoMessage "Importing Index from $($sourceElasticInstance)$($sourceActiveIndex.DealersIndexName) to $($destElasticInstance)$($destActiveIndex.DealersIndexName)"
+        Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.DealersIndexName) --output $($destElasticInstance)$($destActiveIndex.DealersIndexName)--type mapping")
         Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.DealersIndexName) --output $($destElasticInstance)$($destActiveIndex.DealersIndexName)")
 
         #Durkan Collections
         Show-InfoMessage "Importing Durkan Collections."
         Show-InfoMessage "Importing Index from $($sourceElasticInstance)$($sourceActiveIndex.DurkanCollectionIndexName) to $($destElasticInstance)$($destActiveIndex.DurkanCollectionIndexName)"
+        Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.DurkanCollectionIndexName) --output $($destElasticInstance)$($destActiveIndex.DurkanCollectionIndexName)--type mapping")
         Invoke-Expression("elasticdump --input $($sourceElasticInstance)$($sourceActiveIndex.DurkanCollectionIndexName) --output $($destElasticInstance)$($destActiveIndex.DurkanCollectionIndexName)")
 
         Show-InfoMessage "Import process complete."
 
-        Show-InfoMessage "Time to complete: $($stopwatch.Elapsed.Seconds) Minutes, $($stopwatch.Elapsed.Seconds) Seconds."
+        Show-InfoMessage "Time to complete: $($stopwatch.Elapsed.Minutes) Minutes, $($stopwatch.Elapsed.Seconds) Seconds."
     }
 }
