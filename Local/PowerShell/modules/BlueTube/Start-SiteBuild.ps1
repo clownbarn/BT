@@ -56,7 +56,7 @@
 
                     $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
                     $solutionDir = $projectDirRoot
-                    $solutionName = "Mohawk.Flooring.Sitecore.sln"
+                    $solutionName = "Mohawk.Flooring.Sitecore.NoPresentationLayer.sln"
                     $gulpDir = $projectDirRoot + "\PresentationLayer"
                     $packageDir = $solutionDir + "\packages"
 
