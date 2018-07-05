@@ -65,7 +65,7 @@ Description = 'PowerShell Module For Development Tasks at BlueTube, LLC.'
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = '.\Show-InfoMessage.ps1', '.\Invoke-SitePreDeploy.ps1', '.\Start-SiteBuild.ps1', '.\Show-Exception.ps1', '.\Show-ErrorMessage.ps1', '.\Invoke-DBBackup.ps1', 
                 '.\Invoke-DBRestore.ps1', '.\Restart-AppPool.ps1', '.\Show-WarningMessage.ps1', '.\Invoke-MohawkAzCopy.ps1', '.\Invoke-PrepRemoteDebug.ps1', '.\Invoke-MohawkDependencyCopy.ps1',
-                '.\Invoke-FTPDBBackup.ps1', '.\Invoke-SFTPDBBackup.ps1', '.\Invoke-AZDBBackup.ps1', '.\Add-User.ps1', '.\Invoke-BacPacRestore.ps1', '.\Invoke-ElasticImport.ps1'
+                '.\Invoke-FTPDBBackup.ps1', '.\Invoke-SFTPDBBackup.ps1', '.\Invoke-AZDBBackup.ps1', '.\Invoke-BacPacRestore.ps1', '.\Invoke-ElasticImport.ps1'
 
 # Functions to export from this module
 FunctionsToExport = '*'
