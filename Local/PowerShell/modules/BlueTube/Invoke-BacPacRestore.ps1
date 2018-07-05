@@ -34,6 +34,10 @@
             Show-InfoMessage "[database]: aladdinscc for AladdinCommercial_Sitecore_core"
             Show-InfoMessage "[database]: aladdinscm for AladdinCommercial_Sitecore_master"
             Show-InfoMessage "[database]: aladdinscw for AladdinCommercial_Sitecore_web"
+            Show-InfoMessage "[database]: karastansca for Karastan_Sitecore_reporting"
+            Show-InfoMessage "[database]: karastanscc for Karastan_Sitecore_core"
+            Show-InfoMessage "[database]: karastanscm for Karastan_Sitecore_master"
+            Show-InfoMessage "[database]: karastanscw for Karastan_Sitecore_web"
         }
     }
     Process {
@@ -65,6 +69,10 @@
         $_ALADDIN_SITECORE_CORE_DB = "aladdinscc"
         $_ALADDIN_SITECORE_MASTER_DB = "aladdinscm"
         $_ALADDIN_SITECORE_WEB_DB = "aladdinscw"
+        $_KARASTAN_SITECORE_ANALYTICS_DB = "karastansca"
+        $_KARASTAN_SITECORE_CORE_DB = "karastanscc"
+        $_KARASTAN_SITECORE_MASTER_DB = "karastanscm"
+        $_KARASTAN_SITECORE_WEB_DB = "karastanscw"
 
         switch($database)
         {
@@ -169,7 +177,7 @@
                     $databaseToRestore = "BMF_Sitecore_Web"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)BMF_Sitecore_Web"
                     break
-                }                
+                }
             $_ALADDIN_SITECORE_ANALYTICS_DB
                 {
                     $databaseToRestore = "AladdinCommercial_Sitecore_reporting"
@@ -192,6 +200,30 @@
                 {
                     $databaseToRestore = "AladdinCommercial_Sitecore_web"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)AladdinCommercial_Sitecore_web"
+                    break
+                }
+            $_KARASTAN_SITECORE_ANALYTICS_DB
+                {
+                    $databaseToRestore = "Karastan_Sitecore_reporting"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Karastan_Sitecore_reporting"
+                    break
+                }
+            $_KARASTAN_SITECORE_CORE_DB
+                {
+                    $databaseToRestore = "Karastan_Sitecore_core"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Karastan_Sitecore_core"
+                    break
+                }
+            $_KARASTAN_SITECORE_MASTER_DB
+                {
+                    $databaseToRestore = "Karastan_Sitecore_master"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Karastan_Sitecore_master"
+                    break
+                }
+            $_KARASTAN_SITECORE_WEB_DB
+                {
+                    $databaseToRestore = "Karastan_Sitecore_web"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Karastan_Sitecore_web"
                     break
                 }
 
@@ -225,7 +257,7 @@
                 return
             }
             
-            # Second, initialize SQL SMO            
+            # Second, initialize SQL SMO
             if(Test-Path "C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll") {
       
                 #Show-InfoMessage "Adding Type: C:\Windows\assembly\GAC_MSIL\Microsoft.SqlServer.Smo\13.0.0.0__89845dcd8080cc91\Microsoft.SqlServer.Smo.dll"
