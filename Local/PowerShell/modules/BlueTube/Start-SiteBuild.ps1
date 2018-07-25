@@ -9,13 +9,13 @@
         [string]$buildConfig
     )
     Begin {
-        
+
         <#
             Helper function to show usage of cmdlet.
         #>
         Function Show-Usage {
-        
-            Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName] -buildConfig [buildConfig]"  
+
+            Show-InfoMessage "Usage: Start-SiteBuild -siteName [siteName] -buildConfig [buildConfig]"
             Show-InfoMessage "siteName: soa for Mohawk Services (SOA)"
             Show-InfoMessage "siteName: sitecoreshell for Mohawk Sitecore Shell"
             Show-InfoMessage "siteName: flooring for Mohawk Flooring Website (Redesign)"
@@ -27,6 +27,7 @@
             Show-InfoMessage "siteName: viz for Mohawk Product Visualizer"
             Show-InfoMessage "siteName: bmf for BMF/Portico Website"
             Show-InfoMessage "siteName: aladdin for Aladdin Commercial Website"
+            Show-InfoMessage "siteName: karastan for Karastan Website"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
@@ -49,9 +50,9 @@
             $BUILD_FAILED = "BUILD FAILED"
 
             switch($siteName) {
-                
+
                 "flooring" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Flooring Website (Conversion) solution build..."
 
                     $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkFlooring"
@@ -66,7 +67,7 @@
                 }
 
                 "flooringlegacy" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Flooring (Legacy) solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk"
@@ -81,7 +82,7 @@
                 }
 
                 "tmg" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Commercial Website (Redesign) solution build..."
 
                     $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell\inetpub\Mohawk.SitecoreShell.Website\Areas\MohawkGroup"
@@ -96,7 +97,7 @@
                 }
 
                 "tmglegacy" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Commercial Website (Legacy) solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-group"
@@ -110,7 +111,7 @@
                 }
 
                 "rrts" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Residential Ready To Ship solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-residential-ready-to-ship"
@@ -124,7 +125,7 @@
                 }
 
                 "rts" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Commerical Ready To Ship solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-ready-to-ship"
@@ -138,7 +139,7 @@
                 }
 
                 "bmf" {
-                    
+
                     Show-InfoMessage "Starting BMF/Portico Website solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-bmf"
@@ -153,7 +154,7 @@
                 }
 
                 "aladdin" {
-                    
+
                     Show-InfoMessage "Starting Aladdin Commercial Website solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-aladdin-commercial"
@@ -167,8 +168,23 @@
                     break
                 }
 
+                "karastan" {
+
+                    Show-InfoMessage "Starting Karastan Website solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-karastan"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.Karastan.sln"
+                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.Karastan.Website\PresLayerKara"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
                 "soa" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-soa"
@@ -182,9 +198,9 @@
                 }
 
                 "sitecoreshell" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Sitecore Shell solution build..."
-                    
+
                     $projectDirRoot = $sitecoreWorkingDirRoot + "mohawk-sitecore-shell"
                     $solutionDir = $projectDirRoot
                     $solutionName = "Mohawk.SitecoreShell.Website.sln"
@@ -196,11 +212,11 @@
                 }
 
                 "viz" {
-                    
+
                     Show-InfoMessage "Starting Mohawk Product Visualizer solution build..."
 
                     $projectDirRoot = $workingDirRoot + "mohawk-product-visualization"
-                    $solutionDir = $projectDirRoot  
+                    $solutionDir = $projectDirRoot
                     $solutionName = "FlooringInstallMethodGenerator.sln"
                     $packageDir = $solutionDir + "\packages"
 
@@ -208,7 +224,7 @@
 
                     break
                 }
-                        
+
                 default {
 
                     Show-InfoMessage ("Invalid Site Name! " + $siteName)
@@ -218,7 +234,7 @@
             }
 
             Set-Location $solutionDir
-        
+
             # First, perform a clean.
             Show-InfoMessage "Performing clean..."
             Invoke-Expression ("devenv " + $solutionName + " /clean")
@@ -229,51 +245,51 @@
             }
 
             Show-InfoMessage "Clean complete."
-                                                
+
             # Second, run the PreDeploy step, if necessary.
             if($doPreDeployStep) {
 
                 Show-InfoMessage "Performing PreDeploy step..."
                 Invoke-SitePreDeploy -siteName $siteName
                 Show-InfoMessage "PreDeploy step complete."
-            }            
-            
+            }
+
             # Third, restore Nuget packages, if necessary.
             $nugetPackageConfigs = Get-ChildItem $projectDirRoot -Filter packages.config -r | Foreach-Object {$_.FullName}
 
             if($nugetPackageConfigs.length -ne 0) {
-                
+
                 Show-InfoMessage "Restoring Nuget packages for solution..."
 
                 foreach ($config in $nugetPackageConfigs) {
 
                     Show-InfoMessage "Restoring Nuget packages defined in: $($config)"
-                    
+
                     Invoke-Expression ("nuget restore -NonInteractive " + $config + " -PackagesDirectory " + $packageDir + " -MSBuildVersion 14 -Verbosity detailed")
 
                     if($LASTEXITCODE -or !$?) {
-                            
+
                         throw $BUILD_FAILED
                     }
                 }
 
                 Show-InfoMessage "Nuget package restore step complete."
-            }            
+            }
 
             # Fourth, build solution.
             Show-InfoMessage "Building solution..."
             Invoke-Expression ("devenv " + $solutionName + " /build " + $buildConfig)
 
             if($LASTEXITCODE -or !$?) {
-                            
+
                 throw $BUILD_FAILED
             }
 
             Show-InfoMessage "Solution build complete."
-            
+
             # Fifth, do the grunt build, if necessary.
             if(![string]::IsNullOrEmpty($gruntDir)) {
-                
+
                 Show-InfoMessage "Performing Grunt build step..."
 
                 Set-Location $gruntDir
@@ -283,8 +299,8 @@
                 if($LASTEXITCODE -or !$?) {
 
                     throw $BUILD_FAILED
-                } 
-                
+                }
+
                 Invoke-Expression ("grunt copyassets")
 
                 if($LASTEXITCODE -or !$?) {
@@ -293,10 +309,10 @@
                 }
                 Show-InfoMessage "Grunt build step complete."
             }
-            
+
             # Sixth, do the gulp build, if necessary.
             if(![string]::IsNullOrEmpty($gulpDir)) {
-                
+
                 Show-InfoMessage "Performing Gulp build step..."
 
                 Set-Location $gulpDir
@@ -306,13 +322,13 @@
                 if($LASTEXITCODE -or !$?) {
 
                     throw $BUILD_FAILED
-                } 
+                }
 
                 Show-InfoMessage "Gulp build step complete."
             }
         }
         catch {
-            
+
             if($_.Exception.Message -ne $BUILD_FAILED) {
                 Show-Exception $_.Exception
             }
