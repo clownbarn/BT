@@ -28,6 +28,7 @@
             Show-InfoMessage "siteName: bmf for BMF/Portico Website"
             Show-InfoMessage "siteName: aladdin for Aladdin Commercial Website"
             Show-InfoMessage "siteName: karastan for Karastan Website"
+            Show-InfoMessage "siteName: pergo for Pergo Website"
 
             Show-InfoMessage "buildConfig: debug or release"
         }
