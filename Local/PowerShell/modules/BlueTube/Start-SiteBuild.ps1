@@ -183,6 +183,21 @@
                     break
                 }
 
+                "pergo" {
+
+                    Show-InfoMessage "Starting Pergo Website solution build..."
+
+                    $projectDirRoot = $workingDirRoot + "mohawk-pergo"
+                    $solutionDir = $projectDirRoot
+                    $solutionName = "Mohawk.Pergo.sln"
+                    $gulpDir = $projectDirRoot + "\PresentationLayer"
+                    $packageDir = $solutionDir + "\packages"
+
+                    $doPreDeployStep = $FALSE
+
+                    break
+                }
+
                 "soa" {
 
                     Show-InfoMessage "Starting Mohawk Services (SOA) solution build..."
