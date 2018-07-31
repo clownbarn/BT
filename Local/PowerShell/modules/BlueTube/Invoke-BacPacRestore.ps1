@@ -38,6 +38,10 @@
             Show-InfoMessage "[database]: karastanscc for Karastan_Sitecore_core"
             Show-InfoMessage "[database]: karastanscm for Karastan_Sitecore_master"
             Show-InfoMessage "[database]: karastanscw for Karastan_Sitecore_web"
+            Show-InfoMessage "[database]: pergosca for Pergo_Sitecore_reporting"
+            Show-InfoMessage "[database]: pergoscc for Pergo_Sitecore_core"
+            Show-InfoMessage "[database]: pergoscm for Pergo_Sitecore_master"
+            Show-InfoMessage "[database]: pergoscw for Pergo_Sitecore_web"
         }
     }
     Process {
@@ -73,6 +77,10 @@
         $_KARASTAN_SITECORE_CORE_DB = "karastanscc"
         $_KARASTAN_SITECORE_MASTER_DB = "karastanscm"
         $_KARASTAN_SITECORE_WEB_DB = "karastanscw"
+        $_PERGO_SITECORE_ANALYTICS_DB = "pergosca"
+        $_PERGO_SITECORE_CORE_DB = "pergoscc"
+        $_PERGO_SITECORE_MASTER_DB = "pergoscm"
+        $_PERGO_SITECORE_WEB_DB = "pergoscw"
 
         switch($database)
         {
@@ -224,6 +232,30 @@
                 {
                     $databaseToRestore = "Karastan_Sitecore_web"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)Karastan_Sitecore_web"
+                    break
+                }
+            $_PERGO_SITECORE_ANALYTICS_DB
+                {
+                    $databaseToRestore = "Pergo_Sitecore_reporting"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Pergo_Sitecore_reporting"
+                    break
+                }
+            $_PERGO_SITECORE_CORE_DB
+                {
+                    $databaseToRestore = "Pergo_Sitecore_core"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Pergo_Sitecore_core"
+                    break
+                }
+            $_PERGO_SITECORE_MASTER_DB
+                {
+                    $databaseToRestore = "Pergo_Sitecore_master"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Pergo_Sitecore_master"
+                    break
+                }
+            $_PERGO_SITECORE_WEB_DB
+                {
+                    $databaseToRestore = "Pergo_Sitecore_web"
+                    $dbBackupStorageDir = "$($dbBackupStorageRoot)Pergo_Sitecore_web"
                     break
                 }
 
