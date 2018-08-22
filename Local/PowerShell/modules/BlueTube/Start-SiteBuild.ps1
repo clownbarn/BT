@@ -50,6 +50,12 @@
             $nugetPackageConfigs = @()
             $BUILD_FAILED = "BUILD FAILED"
 
+            # Build SOA first if we are building one of the sites that depends on it.
+            if($siteName -ne "soa" -and $siteName -ne "sitecoreshell" -and $siteName -ne "viz")
+            {
+                Start-SiteBuild -siteName "soa" -buildConfig $buildConfig
+            }
+
             switch($siteName) {
 
                 "flooring" {
@@ -176,7 +182,7 @@
                     $projectDirRoot = $workingDirRoot + "mohawk-karastan"
                     $solutionDir = $projectDirRoot
                     $solutionName = "Mohawk.Karastan.sln"
-                    $gulpDir = $projectDirRoot + "\inetpub\Mohawk.Karastan.Website\PresLayerKara"
+                    $gulpDir = $projectDirRoot + "\PresentationLayer"
                     $packageDir = $solutionDir + "\packages"
 
                     $doPreDeployStep = $FALSE
