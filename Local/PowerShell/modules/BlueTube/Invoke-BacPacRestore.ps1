@@ -122,7 +122,7 @@
                 }
             $_HOME_DB
                 {
-                    $databaseToRestore = "MFHome"
+                    $databaseToRestore = "MohawkHome"
                     $dbBackupStorageDir = "$($dbBackupStorageRoot)MohawkHome"
                     break
                 }
